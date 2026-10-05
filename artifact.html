@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZeroStaff Express – more express buses, zero new drivers</title>
+<style>
+  :root {
+    --bg:#0e1117; --card:#1a1a19; --line:#2a2a28; --ink:#ffffff; --ink2:#c3c2b7; --muted:#8a897f;
+    --red:#e3000f; --blue:#3987e5; --amber:#c98500; --aqua:#199e70; --grey:#5f5e5a;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:1040px; margin:0 auto; padding:40px 22px 60px; }
+  .tag { display:inline-block; font-size:13px; color:var(--ink2); border:1px solid var(--line); border-radius:999px; padding:4px 12px; margin-bottom:18px; }
+  h1 { font-size:46px; line-height:1.1; font-weight:900; }
+  h1 span { color:var(--red); }
+  .lead { font-size:20px; color:var(--ink2); margin:14px 0 28px; max-width:760px; }
+  h2 { font-size:26px; margin:46px 0 14px; }
+  h2 small { display:block; font-size:14px; color:var(--red); letter-spacing:.08em; text-transform:uppercase; margin-bottom:4px; }
+  p { color:var(--ink2); margin-bottom:10px; }
+  b, strong { color:var(--ink); }
+  .grid { display:grid; gap:14px; }
+  .g4 { grid-template-columns:repeat(4,1fr); } .g3 { grid-template-columns:repeat(3,1fr); } .g2 { grid-template-columns:repeat(2,1fr); }
+  @media (max-width:820px){ .g4,.g3,.g2 { grid-template-columns:1fr 1fr; } h1 { font-size:34px; } }
+  @media (max-width:520px){ .g4,.g3,.g2 { grid-template-columns:1fr; } }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; }
+  .kpi .v { font-size:34px; font-weight:800; line-height:1.1; }
+  .kpi .l { font-size:13px; color:var(--muted); margin-bottom:6px; }
+  .kpi .d { font-size:13px; margin-top:8px; color:var(--ink2); }
+  .kpi.hl { border-left:5px solid var(--red); }
+  .step { position:relative; padding-left:54px; }
+  .step .n { position:absolute; left:16px; top:16px; width:28px; height:28px; border-radius:50%; background:var(--red); color:#fff; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:14px; }
+  .step h3 { font-size:17px; margin-bottom:4px; }
+  .step p { margin:0; font-size:15px; }
+  .flow { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .flow .box { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 14px; font-size:14px; }
+  .flow .box b { display:block; font-size:15px; }
+  .flow .ar { color:var(--red); font-weight:900; }
+  table { width:100%; border-collapse:collapse; font-size:15px; }
+  th, td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); }
+  th { color:var(--muted); font-weight:600; font-size:13px; }
+  td { color:var(--ink2); }
+  .who h3 { font-size:17px; margin-bottom:6px; }
+  .who p { font-size:15px; margin:0; }
+  .pill { display:inline-block; font-size:12px; padding:2px 9px; border-radius:999px; background:#2a2a28; color:var(--ink2); margin:2px 4px 2px 0; }
+  .ok { color:#4ade80; }
+  .legend { display:flex; gap:16px; flex-wrap:wrap; font-size:13px; color:var(--ink2); margin-top:8px; }
+  .legend i { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
+  svg text { font-family:inherit; }
+  .tl-row { display:flex; align-items:center; gap:10px; margin:8px 0; }
+  .tl-row .lab { width:150px; font-size:13px; color:var(--ink2); flex-shrink:0; }
+  .tl { position:relative; flex:1; height:30px; background:#141413; border-radius:6px; }
+  .seg { position:absolute; top:3px; bottom:3px; border-radius:4px; font-size:11px; color:#fff; display:flex; align-items:center; justify-content:center; overflow:hidden; white-space:nowrap; }
+  footer { margin-top:50px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }
+  a { color:#8fb4ff; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="tag">Claude Impact Lab · Fraunhofer IIS Nuremberg · Track 1: Express Buses & Driver Shortage</div>
+  <h1>ZeroStaff <span>Express</span></h1>
+  <p class="lead">An AI optimizer that launches new express buses in Nuremberg <b>without hiring a single new driver</b>, using the drivers and buses the city already has. Every plan is checked against German labour law.</p>
+
+  <div class="grid g4">
+    <div class="card kpi hl"><div class="l">New drivers · new buses</div><div class="v">0 · 0</div><div class="d">Zero-New-Staff lock</div></div>
+    <div class="card kpi"><div class="l">New X30 departures (06:30–09:00)</div><div class="v">4 + 4</div><div class="d">Hbf → Nordostpark and back</div></div>
+    <div class="card kpi"><div class="l">The traditional way would need</div><div class="v">2 + 2</div><div class="d">new drivers + buses (≈ €120k/yr)</div></div>
+    <div class="card kpi"><div class="l">Independent safety checks</div><div class="v ok">12/12</div><div class="d">break rules, timetable, no new staff</div></div>
+  </div>
+
+  <h2><small>The problem</small>Enough buses, not enough drivers</h2>
+  <p>Nuremberg wants fast express buses to its big job clusters, like <b>Nordostpark</b>. It has the vehicles but not the drivers, and hiring takes months and costs about €60,000 per driver per year. The usual answer, "hire more people", doesn't work.</p>
+  <p><b>Our question:</b> can we create an express line using only the staff and buses that are already on the road?</p>
+
+  <h2><small>What we found</small>Real VAG data: the buses are tightly scheduled</h2>
+  <div class="grid g3">
+    <div class="card"><div class="kpi"><div class="l">Real departures (VAG PULS API)</div><div class="v">30</div></div><p style="margin-top:6px">Lines 43/44 from Nürnberg Hbf, morning of 5 Oct 2026</p></div>
+    <div class="card"><div class="kpi"><div class="l">Real buses tracked</div><div class="v">12</div></div><p style="margin-top:6px">29 of 30 bus return trips verified</p></div>
+    <div class="card"><div class="kpi"><div class="l">Wait at the end of the line</div><div class="v">9–13 min</div></div><p style="margin-top:6px">An X30 round trip needs about 40 minutes, so there are no "free" buses</p></div>
+  </div>
+  <p style="margin-top:14px">So instead of pretending there were spare buses, we asked a smarter question: <b>which existing trips can be handed over to the express line, and what exactly does that cost?</b></p>
+
+  <h2><small>Our solution</small>Hand over a long loop, run an express, be back on time</h2>
+  <p>Some Line 44 buses run a 71-minute loop (Hbf → Langwasser → Hbf). If that loop is replaced by an X30 round trip (Hbf → Nordostpark → Hbf, about 40 min), the <b>same bus and driver are back at Hbf in time for their next normal trip</b>, and the driver even gets extra rest.</p>
+
+  <div class="card" style="margin-top:12px">
+    <div style="font-size:14px;color:var(--muted);margin-bottom:6px">Bus 248, one driver, the same time window (06:53–08:13)</div>
+    <div class="tl-row"><div class="lab">Before</div><div class="tl">
+      <div class="seg" style="left:0%;width:38.75%;background:var(--blue)">Line 44 → Langwasser</div>
+      <div class="seg" style="left:38.75%;width:13.75%;background:var(--grey)">wait</div>
+      <div class="seg" style="left:52.5%;width:36.25%;background:var(--blue)">Line 44 → Hbf</div>
+      <div class="seg" style="left:88.75%;width:11.25%;background:var(--grey)"></div>
+    </div></div>
+    <div class="tl-row"><div class="lab">After (optimized)</div><div class="tl">
+      <div class="seg" style="left:0%;width:25%;background:var(--grey)">rest</div>
+      <div class="seg" style="left:25%;width:2.5%;background:var(--amber)"></div>
+      <div class="seg" style="left:27.5%;width:22.5%;background:var(--red)">X30 → Nordostpark</div>
+      <div class="seg" style="left:50%;width:6.25%;background:var(--grey)"></div>
+      <div class="seg" style="left:56.25%;width:22.5%;background:var(--red)">X30 → Hbf</div>
+      <div class="seg" style="left:78.75%;width:2.5%;background:var(--amber)"></div>
+      <div class="seg" style="left:81.25%;width:18.75%;background:var(--grey)">rest</div>
+    </div></div>
+    <div class="legend"><span><i style="background:var(--blue)"></i>Regular Line 44</span><span><i style="background:var(--red)"></i>New X30 express</span><span><i style="background:var(--amber)"></i>Changeover</span><span><i style="background:var(--grey)"></i>Waiting / rest</span></div>
+  </div>
+
+  <h2><small>Results</small>X30 Nürnberg Hbf → Nordostpark, morning peak</h2>
+  <div class="grid g2">
+    <div class="card">
+      <table>
+        <tr><th>What</th><th>Result</th></tr>
+        <tr><td>X30 departures from Hbf</td><td><b>06:45 · 07:15 · 07:45 · 08:10</b></td></tr>
+        <tr><td>Line 44 round trips handed over</td><td><b>4 of 8</b> candidates</td></tr>
+        <tr><td>Cost to Line 44</td><td>wait per branch <b>20 → 40 min</b>, never two missing in a row</td></tr>
+        <tr><td>Driver rest</td><td><b>+36 min</b> in total</td></tr>
+        <tr><td>New drivers / buses</td><td><b>0 / 0</b> (traditional: 2 + 2)</td></tr>
+        <tr><td>Solver</td><td>best possible plan (OPTIMAL) in about 3 s</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div style="font-size:14px;color:var(--muted);margin-bottom:4px">Trade-off: longest wait for an X30 vs. Line 44 trips handed over</div>
+      <svg viewBox="0 0 440 230" width="100%" role="img" aria-label="Longest X30 wait falls from 150 to 50 minutes as 0 to 4 Line 44 round trips are handed over">
+        <g stroke="#2a2a28"><line x1="50" y1="20" x2="420" y2="20"/><line x1="50" y1="80" x2="420" y2="80"/><line x1="50" y1="140" x2="420" y2="140"/><line x1="50" y1="190" x2="420" y2="190" stroke="#5f5e5a"/></g>
+        <g fill="#8a897f" font-size="12" text-anchor="end"><text x="42" y="24">150</text><text x="42" y="84">100</text><text x="42" y="144">50</text><text x="42" y="194">0</text></g>
+        <g fill="#8a897f" font-size="12" text-anchor="middle"><text x="70" y="210">0</text><text x="157" y="210">1</text><text x="245" y="210">2</text><text x="332" y="210">3</text><text x="420" y="210">4</text><text x="245" y="228">Line 44 round trips handed over</text></g>
+        <polyline fill="none" stroke="#e3000f" stroke-width="2" points="70,20 157,66.4 245,104.8 332,116.8 420,130"/>
+        <g fill="#e3000f" stroke="#1a1a19" stroke-width="2"><circle cx="70" cy="20" r="6"/><circle cx="157" cy="66.4" r="6"/><circle cx="245" cy="104.8" r="6"/><circle cx="332" cy="116.8" r="6"/><circle cx="420" cy="130" r="6"/></g>
+        <g fill="#ffffff" font-size="12" text-anchor="middle"><text x="84" y="14">150 min</text><text x="157" y="56">103</text><text x="245" y="95">71</text><text x="332" y="107">61</text><text x="408" y="120">50 min</text></g>
+      </svg>
+      <p style="font-size:13px;margin:4px 0 0">Each point is a full optimization run. The city chooses the trade-off; the AI shows the exact cost.</p>
+    </div>
+  </div>
+
+  <h2><small>Who it's for</small>Built for the people who run the city's buses</h2>
+  <div class="grid g3">
+    <div class="card who"><h3>🗺️ Transit planners (VAG)</h3><p>Test new express lines in seconds: see which trips to reallocate, the new timetable, and the impact on existing lines.</p></div>
+    <div class="card who"><h3>📱 Bus drivers</h3><p>A clear plan for the day, with protected breaks that are guaranteed by law-checked rules. Some drivers even gain rest time.</p></div>
+    <div class="card who"><h3>🏙️ The city & commuters</h3><p>Faster connections to job hubs like Nordostpark, without new hiring costs, using the city's own open data.</p></div>
+  </div>
+
+  <h2><small>How it works</small>From raw data to a verified plan</h2>
+  <div class="flow">
+    <div class="box"><b>1 · Data</b>VGN GTFS + VAG PULS live API</div><span class="ar">→</span>
+    <div class="box"><b>2 · Input file</b>buses, trips, X30 route</div><span class="ar">→</span>
+    <div class="box"><b>3 · Optimizer</b>Google OR-Tools CP-SAT</div><span class="ar">→</span>
+    <div class="box"><b>4 · Validator</b>12 independent checks</div><span class="ar">→</span>
+    <div class="box"><b>5 · Dashboard</b>Streamlit, live re-solve</div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card step"><div class="n">1</div><h3>Collect real operations</h3><p>Real VAG departures, vehicle numbers and verified return trips are converted automatically into one input file.</p></div>
+    <div class="card step"><div class="n">2</div><h3>List every option</h3><p>Every possible X30 departure, and every Line 44 loop that could be handed over, with the bus back on time.</p></div>
+    <div class="card step"><div class="n">3</div><h3>Optimize under hard rules</h3><p>Zero new staff, normal service otherwise unchanged, ≤ 4 h of work without a 15-min break, ArbZG §4 break totals, a 10 h daily cap, and never two cancellations in a row on a branch.</p></div>
+    <div class="card step"><div class="n">4</div><h3>Pick the best plan</h3><p>The most express service for commuters first, then minimal disruption and empty driving. The solver proves it is optimal.</p></div>
+    <div class="card step"><div class="n">5</div><h3>Verify independently</h3><p>A separate checker re-tests every plan minute by minute: break laws, timetable, locations, one driver per trip.</p></div>
+    <div class="card step"><div class="n">6</div><h3>Explore live</h3><p>In the dashboard, change the rules (headway target, disruption budget) and re-solve in about 1–4 seconds.</p></div>
+  </div>
+
+  <h2><small>Proof it's solid</small>Tested, verified, honest</h2>
+  <div class="grid g4">
+    <div class="card kpi"><div class="l">Automatic tests</div><div class="v">22</div><div class="d">all passing</div></div>
+    <div class="card kpi"><div class="l">Random stress inputs</div><div class="v">1,500+</div><div class="d">checked by the validator</div></div>
+    <div class="card kpi"><div class="l">Idle-time mode (40-driver depot)</div><div class="v">100 %</div><div class="d">express every 30 min, 0 hires</div></div>
+    <div class="card kpi"><div class="l">150-driver depot</div><div class="v">≈ 3 s</div><div class="d">solve time</div></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <p style="margin:0"><b>Honest limits:</b> we see only the morning window of each bus (full-day duties are not public); demand weights are estimates, not passenger counts; the X30's 18-min travel time and 30-min target headway are assumptions we can adjust; VAG approval and passenger impact still need checking.</p>
+  </div>
+
+  <h2><small>Built with</small>Tech & data</h2>
+  <p><span class="pill">Google OR-Tools CP-SAT</span><span class="pill">Python</span><span class="pill">Streamlit</span><span class="pill">Plotly</span><span class="pill">Folium</span><span class="pill">VGN GTFS (CC BY 3.0 DE)</span><span class="pill">VAG PULS API</span><span class="pill">City of Nuremberg open data</span><span class="pill">Claude Code</span></p>
+  <p>Code: <a href="https://github.com/miteshkumar07/ZeroStaff-Express">github.com/miteshkumar07/ZeroStaff-Express</a></p>
+
+  <footer>ZeroStaff Express · Claude Impact Lab Hackathon, 5 Oct 2026 · Data © VGN – Verkehrsverbund Großraum Nürnberg GmbH (CC BY 3.0 DE), VAG Nürnberg PULS API.</footer>
+</div>
+</body>
+</html>

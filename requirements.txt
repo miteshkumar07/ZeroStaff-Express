@@ -1,0 +1,8 @@
+ortools>=9.10
+pytest>=8
+# dashboard (app.py)
+streamlit>=1.40
+pandas>=2
+plotly>=5
+folium>=0.17
+streamlit-folium>=0.20

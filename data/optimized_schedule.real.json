@@ -1,0 +1,3421 @@
+{
+  "meta": {
+    "contract_version": "1.0",
+    "generated_at": "2026-10-05T13:46:27+00:00",
+    "scenario_name": "X30 Nürnberg Hbf – Nordostpark Express - real VAG PULS data",
+    "mode": "trip_reallocation",
+    "assumptions": [
+      "Each bus keeps its own driver; driver duty outside the observed window is not in the data.",
+      "A reallocated round trip must bring the bus back to Hbf before its next scheduled departure.",
+      "X30 one-way 18 min, 5 min turnaround at Nordostpark, 2 min to change destination.",
+      "Counter-peak trips (Nordostpark -> Hbf) weighted 0.25 of peak direction.",
+      "X30 target: a departure at least every 30 min, never closer than 10 min.",
+      "Demand weights are structural proxies, not measured passenger OD counts."
+    ],
+    "validation_required": [
+      "VAG vehicle circulation approval",
+      "VAG driver duty approval",
+      "legal/contractual break validation",
+      "operational turnaround validation",
+      "passenger impact of any replaced trip"
+    ],
+    "input_source": "VAG PULS API (morning departures, Fahrtverlauf, verified return legs) + VGN GTFS",
+    "service_date": "2026-10-05",
+    "solver": "Google OR-Tools CP-SAT 9.15.6755 (0-1 integer linear program)",
+    "status": "OPTIMAL",
+    "objective": -142492.0,
+    "best_bound": -142492.0,
+    "solve_time_s": 3.024,
+    "model_size": {
+      "variables": 7969,
+      "constraints": 34019,
+      "connection_arcs": 3208,
+      "gap_models": 8,
+      "timeline_intervals": 560,
+      "reallocation_options": 8,
+      "solver_time_s": 2.93
+    }
+  },
+  "rules": {
+    "max_continuous_work_min": 240,
+    "min_break_min": 15,
+    "max_shift_work_min": 600,
+    "arbzg_break_totals": true,
+    "arbzg_min_piece_min": 15,
+    "max_new_drivers": 0,
+    "replacement_penalty": 600,
+    "max_consecutive_replacements_per_group": 1,
+    "max_replacements": null,
+    "min_layover_min": 5,
+    "changeover_min": 2,
+    "deadhead_speed_kmh": 25.0,
+    "express_speed_kmh": 30.0,
+    "road_detour_factor": 1.3,
+    "default_deadhead_min": 15,
+    "max_connection_wait_min": 120,
+    "max_express_vehicles": null,
+    "time_resolution_min": 5,
+    "bus_capacity": 80,
+    "annual_cost_per_driver_eur": 60000
+  },
+  "kpis": {
+    "existing_drivers": 7,
+    "new_drivers_required": 0,
+    "new_drivers_allowed": 0,
+    "drivers_used_for_express": 3,
+    "express_trips_target": 10,
+    "express_trips_covered": 8,
+    "express_trips_uncovered": 2,
+    "coverage_pct": 80.0,
+    "max_passenger_wait_min": 50,
+    "headway_targets_met": 0,
+    "headway_targets_total": 2,
+    "demand_weighted_coverage_pct": null,
+    "express_service_minutes": 144,
+    "express_vehicle_km": 58.6,
+    "seats_added": 640,
+    "peak_express_vehicles": 2,
+    "deadhead_minutes": 16,
+    "idle_minutes_before": 168,
+    "idle_minutes_after": 204,
+    "idle_minutes_reclaimed": -36,
+    "idle_reduction_pct": -21.4,
+    "utilisation_before_pct": 70.0,
+    "utilisation_after_pct": 63.6,
+    "existing_trips_reallocated": 4,
+    "regular_trip_legs_cancelled": 8,
+    "rest_minutes_gained": 36,
+    "branch_headways": [
+      {
+        "group": "Line 44 -> Langwasser Mitte",
+        "departures": 4,
+        "reallocated": 2,
+        "max_headway_before_min": 20,
+        "max_headway_after_min": 40
+      },
+      {
+        "group": "Line 44 -> Zerzabelshof Ost",
+        "departures": 4,
+        "reallocated": 2,
+        "max_headway_before_min": 20,
+        "max_headway_after_min": 40
+      }
+    ],
+    "break_rule_violations": 0,
+    "pre_existing_violations": 0,
+    "dedicated_drivers_needed": 2,
+    "new_hires_avoided": 2,
+    "annual_cost_avoided_eur": 120000
+  },
+  "express_routes": [
+    {
+      "route_id": "X30",
+      "name": "Nürnberg Hbf – Nordostpark Express",
+      "origin": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "destination": {
+        "name": "Nürnberg Nordostpark",
+        "lat": 49.48914307,
+        "lon": 11.12585039,
+        "stop_id": "de:09564:1372"
+      },
+      "travel_time_min": 18,
+      "distance_km": 7.33,
+      "timetable_mode": "flexible",
+      "service_windows": [
+        {
+          "label": "AM peak",
+          "start": "06:30",
+          "end": "09:00",
+          "headway_min": 30,
+          "max_headway_min": 30,
+          "directions": [
+            "outbound",
+            "inbound"
+          ]
+        }
+      ],
+      "trips": [
+        {
+          "trip_id": "X30-OUT-0645",
+          "direction": "outbound",
+          "window": "AM peak",
+          "departure": "06:45",
+          "arrival": "07:03",
+          "departure_min": 405,
+          "arrival_min": 423,
+          "departure_iso": "2026-10-05T06:45:00",
+          "arrival_iso": "2026-10-05T07:03:00",
+          "from": "Nürnberg Hbf",
+          "to": "Nürnberg Nordostpark",
+          "demand_weight": 1.0,
+          "covered": true,
+          "driver_id": "BUS-3960"
+        },
+        {
+          "trip_id": "X30-IN-0708",
+          "direction": "inbound",
+          "window": "AM peak",
+          "departure": "07:08",
+          "arrival": "07:26",
+          "departure_min": 428,
+          "arrival_min": 446,
+          "departure_iso": "2026-10-05T07:08:00",
+          "arrival_iso": "2026-10-05T07:26:00",
+          "from": "Nürnberg Nordostpark",
+          "to": "Nürnberg Hbf",
+          "demand_weight": 0.25,
+          "covered": true,
+          "driver_id": "BUS-3960"
+        },
+        {
+          "trip_id": "X30-OUT-0715",
+          "direction": "outbound",
+          "window": "AM peak",
+          "departure": "07:15",
+          "arrival": "07:33",
+          "departure_min": 435,
+          "arrival_min": 453,
+          "departure_iso": "2026-10-05T07:15:00",
+          "arrival_iso": "2026-10-05T07:33:00",
+          "from": "Nürnberg Hbf",
+          "to": "Nürnberg Nordostpark",
+          "demand_weight": 1.0,
+          "covered": true,
+          "driver_id": "BUS-248"
+        },
+        {
+          "trip_id": "X30-IN-0738",
+          "direction": "inbound",
+          "window": "AM peak",
+          "departure": "07:38",
+          "arrival": "07:56",
+          "departure_min": 458,
+          "arrival_min": 476,
+          "departure_iso": "2026-10-05T07:38:00",
+          "arrival_iso": "2026-10-05T07:56:00",
+          "from": "Nürnberg Nordostpark",
+          "to": "Nürnberg Hbf",
+          "demand_weight": 0.25,
+          "covered": true,
+          "driver_id": "BUS-248"
+        },
+        {
+          "trip_id": "X30-OUT-0745",
+          "direction": "outbound",
+          "window": "AM peak",
+          "departure": "07:45",
+          "arrival": "08:03",
+          "departure_min": 465,
+          "arrival_min": 483,
+          "departure_iso": "2026-10-05T07:45:00",
+          "arrival_iso": "2026-10-05T08:03:00",
+          "from": "Nürnberg Hbf",
+          "to": "Nürnberg Nordostpark",
+          "demand_weight": 1.0,
+          "covered": true,
+          "driver_id": "BUS-3960"
+        },
+        {
+          "trip_id": "X30-IN-0808",
+          "direction": "inbound",
+          "window": "AM peak",
+          "departure": "08:08",
+          "arrival": "08:26",
+          "departure_min": 488,
+          "arrival_min": 506,
+          "departure_iso": "2026-10-05T08:08:00",
+          "arrival_iso": "2026-10-05T08:26:00",
+          "from": "Nürnberg Nordostpark",
+          "to": "Nürnberg Hbf",
+          "demand_weight": 0.25,
+          "covered": true,
+          "driver_id": "BUS-3960"
+        },
+        {
+          "trip_id": "X30-OUT-0810",
+          "direction": "outbound",
+          "window": "AM peak",
+          "departure": "08:10",
+          "arrival": "08:28",
+          "departure_min": 490,
+          "arrival_min": 508,
+          "departure_iso": "2026-10-05T08:10:00",
+          "arrival_iso": "2026-10-05T08:28:00",
+          "from": "Nürnberg Hbf",
+          "to": "Nürnberg Nordostpark",
+          "demand_weight": 1.0,
+          "covered": true,
+          "driver_id": "BUS-281"
+        },
+        {
+          "trip_id": "X30-IN-0833",
+          "direction": "inbound",
+          "window": "AM peak",
+          "departure": "08:33",
+          "arrival": "08:51",
+          "departure_min": 513,
+          "arrival_min": 531,
+          "departure_iso": "2026-10-05T08:33:00",
+          "arrival_iso": "2026-10-05T08:51:00",
+          "from": "Nürnberg Nordostpark",
+          "to": "Nürnberg Hbf",
+          "demand_weight": 0.25,
+          "covered": true,
+          "driver_id": "BUS-281"
+        }
+      ],
+      "stats": {
+        "trips_target": 10,
+        "trips_covered": 8,
+        "coverage_pct": 80.0,
+        "headways": [
+          {
+            "route_id": "X30",
+            "window": "AM peak",
+            "direction": "outbound",
+            "departures": 4,
+            "max_wait_min": 50,
+            "target_headway_min": 30,
+            "target_met": false
+          },
+          {
+            "route_id": "X30",
+            "window": "AM peak",
+            "direction": "inbound",
+            "departures": 4,
+            "max_wait_min": 38,
+            "target_headway_min": 30,
+            "target_met": false
+          }
+        ]
+      }
+    }
+  ],
+  "reallocations": [
+    {
+      "driver_id": "BUS-248",
+      "option_id": "2059839",
+      "group": "Line 44 -> Langwasser Mitte",
+      "cancelled": [
+        {
+          "label": "Line 44 Hbf -> Langwasser Mitte",
+          "start": "06:53",
+          "end": "07:24",
+          "start_min": 413,
+          "end_min": 444,
+          "line": "44",
+          "fahrtnummer": "2059839"
+        },
+        {
+          "label": "Line 44 Langwasser Mitte -> Hbf",
+          "start": "07:35",
+          "end": "08:04",
+          "start_min": 455,
+          "end_min": 484,
+          "line": "44",
+          "fahrtnummer": "2059841"
+        }
+      ],
+      "freed_window": {
+        "start": "06:53",
+        "end": "08:13",
+        "start_min": 413,
+        "end_min": 493
+      },
+      "express_trips": [
+        "X30-OUT-0715",
+        "X30-IN-0738"
+      ],
+      "rest_before_min": 20,
+      "rest_after_min": 40
+    },
+    {
+      "driver_id": "BUS-281",
+      "option_id": "2067642",
+      "group": "Line 44 -> Langwasser Mitte",
+      "cancelled": [
+        {
+          "label": "Line 44 Hbf -> Langwasser Mitte",
+          "start": "07:33",
+          "end": "08:04",
+          "start_min": 453,
+          "end_min": 484,
+          "line": "44",
+          "fahrtnummer": "2067642"
+        },
+        {
+          "label": "Line 44 Langwasser Mitte -> Hbf",
+          "start": "08:15",
+          "end": "08:44",
+          "start_min": 495,
+          "end_min": 524,
+          "line": "44",
+          "fahrtnummer": "2067644"
+        }
+      ],
+      "freed_window": {
+        "start": "07:33",
+        "end": "08:53",
+        "start_min": 453,
+        "end_min": 533
+      },
+      "express_trips": [
+        "X30-OUT-0810",
+        "X30-IN-0833"
+      ],
+      "rest_before_min": 20,
+      "rest_after_min": 40
+    },
+    {
+      "driver_id": "BUS-3960",
+      "option_id": "2075807",
+      "group": "Line 44 -> Zerzabelshof Ost",
+      "cancelled": [
+        {
+          "label": "Line 44 Hbf -> Zerzabelshof Ost",
+          "start": "06:43",
+          "end": "07:03",
+          "start_min": 403,
+          "end_min": 423,
+          "line": "44",
+          "fahrtnummer": "2075807"
+        },
+        {
+          "label": "Line 44 Zerzabelshof Ost -> Hbf",
+          "start": "07:16",
+          "end": "07:34",
+          "start_min": 436,
+          "end_min": 454,
+          "line": "44",
+          "fahrtnummer": "2075808"
+        }
+      ],
+      "freed_window": {
+        "start": "06:43",
+        "end": "07:43",
+        "start_min": 403,
+        "end_min": 463
+      },
+      "express_trips": [
+        "X30-OUT-0645",
+        "X30-IN-0708"
+      ],
+      "rest_before_min": 22,
+      "rest_after_min": 20
+    },
+    {
+      "driver_id": "BUS-3960",
+      "option_id": "2075809",
+      "group": "Line 44 -> Zerzabelshof Ost",
+      "cancelled": [
+        {
+          "label": "Line 44 Hbf -> Zerzabelshof Ost",
+          "start": "07:43",
+          "end": "08:03",
+          "start_min": 463,
+          "end_min": 483,
+          "line": "44",
+          "fahrtnummer": "2075809"
+        },
+        {
+          "label": "Line 44 Zerzabelshof Ost -> Hbf",
+          "start": "08:16",
+          "end": "08:34",
+          "start_min": 496,
+          "end_min": 514,
+          "line": "44",
+          "fahrtnummer": "2075810"
+        }
+      ],
+      "freed_window": {
+        "start": "07:43",
+        "end": "08:43",
+        "start_min": 463,
+        "end_min": 523
+      },
+      "express_trips": [
+        "X30-OUT-0745",
+        "X30-IN-0808"
+      ],
+      "rest_before_min": 22,
+      "rest_after_min": 20
+    }
+  ],
+  "drivers": [
+    {
+      "driver_id": "BUS-248",
+      "name": "Bus 248 (Line 44) + its driver",
+      "is_new_hire": false,
+      "available_for_express": true,
+      "changed": true,
+      "reallocated_option_ids": [
+        "2059839"
+      ],
+      "shift_start": "06:53",
+      "shift_end": "08:13",
+      "shift_start_min": 413,
+      "shift_end_min": 493,
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "before": [
+        {
+          "type": "regular_service",
+          "label": "Line 44 Hbf -> Langwasser Mitte",
+          "start": "06:53",
+          "end": "07:24",
+          "start_min": 413,
+          "end_min": 444,
+          "duration_min": 31,
+          "start_iso": "2026-10-05T06:53:00",
+          "end_iso": "2026-10-05T07:24:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Langwasser Mitte (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2059839"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:24",
+          "end": "07:35",
+          "start_min": 444,
+          "end_min": 455,
+          "duration_min": 11,
+          "start_iso": "2026-10-05T07:24:00",
+          "end_iso": "2026-10-05T07:35:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Langwasser Mitte -> Hbf",
+          "start": "07:35",
+          "end": "08:04",
+          "start_min": 455,
+          "end_min": 484,
+          "duration_min": 29,
+          "start_iso": "2026-10-05T07:35:00",
+          "end_iso": "2026-10-05T08:04:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Langwasser Mitte (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2059841"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "08:04",
+          "end": "08:13",
+          "start_min": 484,
+          "end_min": 493,
+          "duration_min": 9,
+          "start_iso": "2026-10-05T08:04:00",
+          "end_iso": "2026-10-05T08:13:00",
+          "counts_as_break": false
+        }
+      ],
+      "after": [
+        {
+          "type": "idle",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "06:53",
+          "end": "07:13",
+          "start_min": 413,
+          "end_min": 433,
+          "duration_min": 20,
+          "start_iso": "2026-10-05T06:53:00",
+          "end_iso": "2026-10-05T07:13:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "deadhead",
+          "label": "Bus changeover at Nürnberg Hbf",
+          "start": "07:13",
+          "end": "07:15",
+          "start_min": 433,
+          "end_min": 435,
+          "duration_min": 2,
+          "start_iso": "2026-10-05T07:13:00",
+          "end_iso": "2026-10-05T07:15:00",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          }
+        },
+        {
+          "type": "express",
+          "label": "X30 Nürnberg Hbf -> Nürnberg Nordostpark",
+          "start": "07:15",
+          "end": "07:33",
+          "start_min": 435,
+          "end_min": 453,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T07:15:00",
+          "end_iso": "2026-10-05T07:33:00",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Nürnberg Nordostpark",
+            "lat": 49.48914307,
+            "lon": 11.12585039,
+            "stop_id": "de:09564:1372"
+          },
+          "trip_id": "X30-OUT-0715",
+          "route_id": "X30",
+          "direction": "outbound"
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:33",
+          "end": "07:38",
+          "start_min": 453,
+          "end_min": 458,
+          "duration_min": 5,
+          "start_iso": "2026-10-05T07:33:00",
+          "end_iso": "2026-10-05T07:38:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "express",
+          "label": "X30 Nürnberg Nordostpark -> Nürnberg Hbf",
+          "start": "07:38",
+          "end": "07:56",
+          "start_min": 458,
+          "end_min": 476,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T07:38:00",
+          "end_iso": "2026-10-05T07:56:00",
+          "from": {
+            "name": "Nürnberg Nordostpark",
+            "lat": 49.48914307,
+            "lon": 11.12585039,
+            "stop_id": "de:09564:1372"
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "trip_id": "X30-IN-0738",
+          "route_id": "X30",
+          "direction": "inbound"
+        },
+        {
+          "type": "deadhead",
+          "label": "Bus changeover at Nürnberg Hbf",
+          "start": "07:56",
+          "end": "07:58",
+          "start_min": 476,
+          "end_min": 478,
+          "duration_min": 2,
+          "start_iso": "2026-10-05T07:56:00",
+          "end_iso": "2026-10-05T07:58:00",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          }
+        },
+        {
+          "type": "idle",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "07:58",
+          "end": "08:13",
+          "start_min": 478,
+          "end_min": 493,
+          "duration_min": 15,
+          "start_iso": "2026-10-05T07:58:00",
+          "end_iso": "2026-10-05T08:13:00",
+          "counts_as_break": false
+        }
+      ],
+      "breaks": [],
+      "itinerary": [
+        "06:53-07:13  Waiting at Nürnberg Hbf",
+        "07:13-07:15  Bus changeover at Nürnberg Hbf (no passengers)",
+        "07:15-07:33  EXPRESS X30 Nürnberg Hbf -> Nürnberg Nordostpark",
+        "07:38-07:56  EXPRESS X30 Nürnberg Nordostpark -> Nürnberg Hbf",
+        "07:56-07:58  Bus changeover at Nürnberg Hbf (no passengers)",
+        "07:58-08:13  Waiting at Nürnberg Hbf"
+      ],
+      "continuous_work_blocks": [
+        {
+          "start": "07:13",
+          "end": "07:58",
+          "start_min": 433,
+          "end_min": 478,
+          "duration_min": 45,
+          "within_limit": true
+        }
+      ],
+      "stats": {
+        "before": {
+          "shift_minutes": 80,
+          "work_minutes": 60,
+          "idle_minutes": 20,
+          "regular_minutes": 60,
+          "express_minutes": 0,
+          "deadhead_minutes": 0,
+          "break_minutes": 0,
+          "express_trips": 0,
+          "max_continuous_work_min": 71,
+          "utilisation_pct": 75.0
+        },
+        "after": {
+          "shift_minutes": 80,
+          "work_minutes": 40,
+          "idle_minutes": 40,
+          "regular_minutes": 0,
+          "express_minutes": 36,
+          "deadhead_minutes": 4,
+          "break_minutes": 0,
+          "express_trips": 2,
+          "max_continuous_work_min": 45,
+          "utilisation_pct": 50.0
+        },
+        "express_trips": 2,
+        "idle_minutes_reclaimed": -20
+      },
+      "meta": {
+        "vehicle_number": "248",
+        "observation_window_only": true
+      }
+    },
+    {
+      "driver_id": "BUS-281",
+      "name": "Bus 281 (Line 44) + its driver",
+      "is_new_hire": false,
+      "available_for_express": true,
+      "changed": true,
+      "reallocated_option_ids": [
+        "2067642"
+      ],
+      "shift_start": "07:33",
+      "shift_end": "08:53",
+      "shift_start_min": 453,
+      "shift_end_min": 533,
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "before": [
+        {
+          "type": "regular_service",
+          "label": "Line 44 Hbf -> Langwasser Mitte",
+          "start": "07:33",
+          "end": "08:04",
+          "start_min": 453,
+          "end_min": 484,
+          "duration_min": 31,
+          "start_iso": "2026-10-05T07:33:00",
+          "end_iso": "2026-10-05T08:04:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Langwasser Mitte (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2067642"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "08:04",
+          "end": "08:15",
+          "start_min": 484,
+          "end_min": 495,
+          "duration_min": 11,
+          "start_iso": "2026-10-05T08:04:00",
+          "end_iso": "2026-10-05T08:15:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Langwasser Mitte -> Hbf",
+          "start": "08:15",
+          "end": "08:44",
+          "start_min": 495,
+          "end_min": 524,
+          "duration_min": 29,
+          "start_iso": "2026-10-05T08:15:00",
+          "end_iso": "2026-10-05T08:44:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Langwasser Mitte (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2067644"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "08:44",
+          "end": "08:53",
+          "start_min": 524,
+          "end_min": 533,
+          "duration_min": 9,
+          "start_iso": "2026-10-05T08:44:00",
+          "end_iso": "2026-10-05T08:53:00",
+          "counts_as_break": false
+        }
+      ],
+      "after": [
+        {
+          "type": "idle",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "07:33",
+          "end": "08:08",
+          "start_min": 453,
+          "end_min": 488,
+          "duration_min": 35,
+          "start_iso": "2026-10-05T07:33:00",
+          "end_iso": "2026-10-05T08:08:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "deadhead",
+          "label": "Bus changeover at Nürnberg Hbf",
+          "start": "08:08",
+          "end": "08:10",
+          "start_min": 488,
+          "end_min": 490,
+          "duration_min": 2,
+          "start_iso": "2026-10-05T08:08:00",
+          "end_iso": "2026-10-05T08:10:00",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          }
+        },
+        {
+          "type": "express",
+          "label": "X30 Nürnberg Hbf -> Nürnberg Nordostpark",
+          "start": "08:10",
+          "end": "08:28",
+          "start_min": 490,
+          "end_min": 508,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T08:10:00",
+          "end_iso": "2026-10-05T08:28:00",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Nürnberg Nordostpark",
+            "lat": 49.48914307,
+            "lon": 11.12585039,
+            "stop_id": "de:09564:1372"
+          },
+          "trip_id": "X30-OUT-0810",
+          "route_id": "X30",
+          "direction": "outbound"
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "08:28",
+          "end": "08:33",
+          "start_min": 508,
+          "end_min": 513,
+          "duration_min": 5,
+          "start_iso": "2026-10-05T08:28:00",
+          "end_iso": "2026-10-05T08:33:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "express",
+          "label": "X30 Nürnberg Nordostpark -> Nürnberg Hbf",
+          "start": "08:33",
+          "end": "08:51",
+          "start_min": 513,
+          "end_min": 531,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T08:33:00",
+          "end_iso": "2026-10-05T08:51:00",
+          "from": {
+            "name": "Nürnberg Nordostpark",
+            "lat": 49.48914307,
+            "lon": 11.12585039,
+            "stop_id": "de:09564:1372"
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "trip_id": "X30-IN-0833",
+          "route_id": "X30",
+          "direction": "inbound"
+        },
+        {
+          "type": "deadhead",
+          "label": "Bus changeover at Nürnberg Hbf",
+          "start": "08:51",
+          "end": "08:53",
+          "start_min": 531,
+          "end_min": 533,
+          "duration_min": 2,
+          "start_iso": "2026-10-05T08:51:00",
+          "end_iso": "2026-10-05T08:53:00",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          }
+        }
+      ],
+      "breaks": [],
+      "itinerary": [
+        "07:33-08:08  Waiting at Nürnberg Hbf",
+        "08:08-08:10  Bus changeover at Nürnberg Hbf (no passengers)",
+        "08:10-08:28  EXPRESS X30 Nürnberg Hbf -> Nürnberg Nordostpark",
+        "08:33-08:51  EXPRESS X30 Nürnberg Nordostpark -> Nürnberg Hbf",
+        "08:51-08:53  Bus changeover at Nürnberg Hbf (no passengers)"
+      ],
+      "continuous_work_blocks": [
+        {
+          "start": "08:08",
+          "end": "08:53",
+          "start_min": 488,
+          "end_min": 533,
+          "duration_min": 45,
+          "within_limit": true
+        }
+      ],
+      "stats": {
+        "before": {
+          "shift_minutes": 80,
+          "work_minutes": 60,
+          "idle_minutes": 20,
+          "regular_minutes": 60,
+          "express_minutes": 0,
+          "deadhead_minutes": 0,
+          "break_minutes": 0,
+          "express_trips": 0,
+          "max_continuous_work_min": 71,
+          "utilisation_pct": 75.0
+        },
+        "after": {
+          "shift_minutes": 80,
+          "work_minutes": 40,
+          "idle_minutes": 40,
+          "regular_minutes": 0,
+          "express_minutes": 36,
+          "deadhead_minutes": 4,
+          "break_minutes": 0,
+          "express_trips": 2,
+          "max_continuous_work_min": 45,
+          "utilisation_pct": 50.0
+        },
+        "express_trips": 2,
+        "idle_minutes_reclaimed": -20
+      },
+      "meta": {
+        "vehicle_number": "281",
+        "observation_window_only": true
+      }
+    },
+    {
+      "driver_id": "BUS-3960",
+      "name": "Bus 3960 (Line 44) + its driver",
+      "is_new_hire": false,
+      "available_for_express": true,
+      "changed": true,
+      "reallocated_option_ids": [
+        "2075807",
+        "2075809"
+      ],
+      "shift_start": "06:43",
+      "shift_end": "08:43",
+      "shift_start_min": 403,
+      "shift_end_min": 523,
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "before": [
+        {
+          "type": "regular_service",
+          "label": "Line 44 Hbf -> Zerzabelshof Ost",
+          "start": "06:43",
+          "end": "07:03",
+          "start_min": 403,
+          "end_min": 423,
+          "duration_min": 20,
+          "start_iso": "2026-10-05T06:43:00",
+          "end_iso": "2026-10-05T07:03:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Zerzabelshof Ost (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2075807"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:03",
+          "end": "07:16",
+          "start_min": 423,
+          "end_min": 436,
+          "duration_min": 13,
+          "start_iso": "2026-10-05T07:03:00",
+          "end_iso": "2026-10-05T07:16:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Zerzabelshof Ost -> Hbf",
+          "start": "07:16",
+          "end": "07:34",
+          "start_min": 436,
+          "end_min": 454,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T07:16:00",
+          "end_iso": "2026-10-05T07:34:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Zerzabelshof Ost (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2075808"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:34",
+          "end": "07:43",
+          "start_min": 454,
+          "end_min": 463,
+          "duration_min": 9,
+          "start_iso": "2026-10-05T07:34:00",
+          "end_iso": "2026-10-05T07:43:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Hbf -> Zerzabelshof Ost",
+          "start": "07:43",
+          "end": "08:03",
+          "start_min": 463,
+          "end_min": 483,
+          "duration_min": 20,
+          "start_iso": "2026-10-05T07:43:00",
+          "end_iso": "2026-10-05T08:03:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Zerzabelshof Ost (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2075809"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "08:03",
+          "end": "08:16",
+          "start_min": 483,
+          "end_min": 496,
+          "duration_min": 13,
+          "start_iso": "2026-10-05T08:03:00",
+          "end_iso": "2026-10-05T08:16:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Zerzabelshof Ost -> Hbf",
+          "start": "08:16",
+          "end": "08:34",
+          "start_min": 496,
+          "end_min": 514,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T08:16:00",
+          "end_iso": "2026-10-05T08:34:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Zerzabelshof Ost (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2075810"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "08:34",
+          "end": "08:43",
+          "start_min": 514,
+          "end_min": 523,
+          "duration_min": 9,
+          "start_iso": "2026-10-05T08:34:00",
+          "end_iso": "2026-10-05T08:43:00",
+          "counts_as_break": false
+        }
+      ],
+      "after": [
+        {
+          "type": "deadhead",
+          "label": "Bus changeover at Nürnberg Hbf",
+          "start": "06:43",
+          "end": "06:45",
+          "start_min": 403,
+          "end_min": 405,
+          "duration_min": 2,
+          "start_iso": "2026-10-05T06:43:00",
+          "end_iso": "2026-10-05T06:45:00",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          }
+        },
+        {
+          "type": "express",
+          "label": "X30 Nürnberg Hbf -> Nürnberg Nordostpark",
+          "start": "06:45",
+          "end": "07:03",
+          "start_min": 405,
+          "end_min": 423,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T06:45:00",
+          "end_iso": "2026-10-05T07:03:00",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Nürnberg Nordostpark",
+            "lat": 49.48914307,
+            "lon": 11.12585039,
+            "stop_id": "de:09564:1372"
+          },
+          "trip_id": "X30-OUT-0645",
+          "route_id": "X30",
+          "direction": "outbound"
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:03",
+          "end": "07:08",
+          "start_min": 423,
+          "end_min": 428,
+          "duration_min": 5,
+          "start_iso": "2026-10-05T07:03:00",
+          "end_iso": "2026-10-05T07:08:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "express",
+          "label": "X30 Nürnberg Nordostpark -> Nürnberg Hbf",
+          "start": "07:08",
+          "end": "07:26",
+          "start_min": 428,
+          "end_min": 446,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T07:08:00",
+          "end_iso": "2026-10-05T07:26:00",
+          "from": {
+            "name": "Nürnberg Nordostpark",
+            "lat": 49.48914307,
+            "lon": 11.12585039,
+            "stop_id": "de:09564:1372"
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "trip_id": "X30-IN-0708",
+          "route_id": "X30",
+          "direction": "inbound"
+        },
+        {
+          "type": "deadhead",
+          "label": "Bus changeover at Nürnberg Hbf",
+          "start": "07:26",
+          "end": "07:28",
+          "start_min": 446,
+          "end_min": 448,
+          "duration_min": 2,
+          "start_iso": "2026-10-05T07:26:00",
+          "end_iso": "2026-10-05T07:28:00",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          }
+        },
+        {
+          "type": "break",
+          "label": "Break (15 min)",
+          "start": "07:28",
+          "end": "07:43",
+          "start_min": 448,
+          "end_min": 463,
+          "duration_min": 15,
+          "start_iso": "2026-10-05T07:28:00",
+          "end_iso": "2026-10-05T07:43:00",
+          "counts_as_break": true
+        },
+        {
+          "type": "deadhead",
+          "label": "Bus changeover at Nürnberg Hbf",
+          "start": "07:43",
+          "end": "07:45",
+          "start_min": 463,
+          "end_min": 465,
+          "duration_min": 2,
+          "start_iso": "2026-10-05T07:43:00",
+          "end_iso": "2026-10-05T07:45:00",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          }
+        },
+        {
+          "type": "express",
+          "label": "X30 Nürnberg Hbf -> Nürnberg Nordostpark",
+          "start": "07:45",
+          "end": "08:03",
+          "start_min": 465,
+          "end_min": 483,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T07:45:00",
+          "end_iso": "2026-10-05T08:03:00",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Nürnberg Nordostpark",
+            "lat": 49.48914307,
+            "lon": 11.12585039,
+            "stop_id": "de:09564:1372"
+          },
+          "trip_id": "X30-OUT-0745",
+          "route_id": "X30",
+          "direction": "outbound"
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "08:03",
+          "end": "08:08",
+          "start_min": 483,
+          "end_min": 488,
+          "duration_min": 5,
+          "start_iso": "2026-10-05T08:03:00",
+          "end_iso": "2026-10-05T08:08:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "express",
+          "label": "X30 Nürnberg Nordostpark -> Nürnberg Hbf",
+          "start": "08:08",
+          "end": "08:26",
+          "start_min": 488,
+          "end_min": 506,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T08:08:00",
+          "end_iso": "2026-10-05T08:26:00",
+          "from": {
+            "name": "Nürnberg Nordostpark",
+            "lat": 49.48914307,
+            "lon": 11.12585039,
+            "stop_id": "de:09564:1372"
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "trip_id": "X30-IN-0808",
+          "route_id": "X30",
+          "direction": "inbound"
+        },
+        {
+          "type": "deadhead",
+          "label": "Bus changeover at Nürnberg Hbf",
+          "start": "08:26",
+          "end": "08:28",
+          "start_min": 506,
+          "end_min": 508,
+          "duration_min": 2,
+          "start_iso": "2026-10-05T08:26:00",
+          "end_iso": "2026-10-05T08:28:00",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          }
+        },
+        {
+          "type": "idle",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "08:28",
+          "end": "08:43",
+          "start_min": 508,
+          "end_min": 523,
+          "duration_min": 15,
+          "start_iso": "2026-10-05T08:28:00",
+          "end_iso": "2026-10-05T08:43:00",
+          "counts_as_break": false
+        }
+      ],
+      "breaks": [
+        {
+          "start": "07:28",
+          "end": "07:43",
+          "start_min": 448,
+          "end_min": 463,
+          "duration_min": 15
+        }
+      ],
+      "itinerary": [
+        "06:43-06:45  Bus changeover at Nürnberg Hbf (no passengers)",
+        "06:45-07:03  EXPRESS X30 Nürnberg Hbf -> Nürnberg Nordostpark",
+        "07:08-07:26  EXPRESS X30 Nürnberg Nordostpark -> Nürnberg Hbf",
+        "07:26-07:28  Bus changeover at Nürnberg Hbf (no passengers)",
+        "07:28-07:43  BREAK 15 min - protected",
+        "07:43-07:45  Bus changeover at Nürnberg Hbf (no passengers)",
+        "07:45-08:03  EXPRESS X30 Nürnberg Hbf -> Nürnberg Nordostpark",
+        "08:08-08:26  EXPRESS X30 Nürnberg Nordostpark -> Nürnberg Hbf",
+        "08:26-08:28  Bus changeover at Nürnberg Hbf (no passengers)",
+        "08:28-08:43  Waiting at Nürnberg Hbf"
+      ],
+      "continuous_work_blocks": [
+        {
+          "start": "06:43",
+          "end": "07:28",
+          "start_min": 403,
+          "end_min": 448,
+          "duration_min": 45,
+          "within_limit": true
+        },
+        {
+          "start": "07:43",
+          "end": "08:28",
+          "start_min": 463,
+          "end_min": 508,
+          "duration_min": 45,
+          "within_limit": true
+        }
+      ],
+      "stats": {
+        "before": {
+          "shift_minutes": 120,
+          "work_minutes": 76,
+          "idle_minutes": 44,
+          "regular_minutes": 76,
+          "express_minutes": 0,
+          "deadhead_minutes": 0,
+          "break_minutes": 0,
+          "express_trips": 0,
+          "max_continuous_work_min": 111,
+          "utilisation_pct": 63.3
+        },
+        "after": {
+          "shift_minutes": 120,
+          "work_minutes": 80,
+          "idle_minutes": 40,
+          "regular_minutes": 0,
+          "express_minutes": 72,
+          "deadhead_minutes": 8,
+          "break_minutes": 15,
+          "express_trips": 4,
+          "max_continuous_work_min": 45,
+          "utilisation_pct": 66.7
+        },
+        "express_trips": 4,
+        "idle_minutes_reclaimed": 4
+      },
+      "meta": {
+        "vehicle_number": "3960",
+        "observation_window_only": true
+      }
+    },
+    {
+      "driver_id": "BUS-3962",
+      "name": "Bus 3962 (Line 44) + its driver",
+      "is_new_hire": false,
+      "available_for_express": true,
+      "changed": false,
+      "reallocated_option_ids": [],
+      "shift_start": "07:23",
+      "shift_end": "08:23",
+      "shift_start_min": 443,
+      "shift_end_min": 503,
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "before": [
+        {
+          "type": "regular_service",
+          "label": "Line 44 Hbf -> Zerzabelshof Ost",
+          "start": "07:23",
+          "end": "07:43",
+          "start_min": 443,
+          "end_min": 463,
+          "duration_min": 20,
+          "start_iso": "2026-10-05T07:23:00",
+          "end_iso": "2026-10-05T07:43:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Zerzabelshof Ost (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2053010"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:43",
+          "end": "07:56",
+          "start_min": 463,
+          "end_min": 476,
+          "duration_min": 13,
+          "start_iso": "2026-10-05T07:43:00",
+          "end_iso": "2026-10-05T07:56:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Zerzabelshof Ost -> Hbf",
+          "start": "07:56",
+          "end": "08:14",
+          "start_min": 476,
+          "end_min": 494,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T07:56:00",
+          "end_iso": "2026-10-05T08:14:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Zerzabelshof Ost (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2053011"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "08:14",
+          "end": "08:23",
+          "start_min": 494,
+          "end_min": 503,
+          "duration_min": 9,
+          "start_iso": "2026-10-05T08:14:00",
+          "end_iso": "2026-10-05T08:23:00",
+          "counts_as_break": false
+        }
+      ],
+      "after": [
+        {
+          "type": "regular_service",
+          "label": "Line 44 Hbf -> Zerzabelshof Ost",
+          "start": "07:23",
+          "end": "07:43",
+          "start_min": 443,
+          "end_min": 463,
+          "duration_min": 20,
+          "start_iso": "2026-10-05T07:23:00",
+          "end_iso": "2026-10-05T07:43:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Zerzabelshof Ost (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2053010"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:43",
+          "end": "07:56",
+          "start_min": 463,
+          "end_min": 476,
+          "duration_min": 13,
+          "start_iso": "2026-10-05T07:43:00",
+          "end_iso": "2026-10-05T07:56:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Zerzabelshof Ost -> Hbf",
+          "start": "07:56",
+          "end": "08:14",
+          "start_min": 476,
+          "end_min": 494,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T07:56:00",
+          "end_iso": "2026-10-05T08:14:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Zerzabelshof Ost (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2053011"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "08:14",
+          "end": "08:23",
+          "start_min": 494,
+          "end_min": 503,
+          "duration_min": 9,
+          "start_iso": "2026-10-05T08:14:00",
+          "end_iso": "2026-10-05T08:23:00",
+          "counts_as_break": false
+        }
+      ],
+      "breaks": [],
+      "itinerary": [
+        "07:23-07:43  Line 44 Hbf -> Zerzabelshof Ost (Nürnberg Hbf -> Zerzabelshof Ost (Nürnberg))",
+        "07:56-08:14  Line 44 Zerzabelshof Ost -> Hbf (Zerzabelshof Ost (Nürnberg) -> Nürnberg Hbf)"
+      ],
+      "continuous_work_blocks": [
+        {
+          "start": "07:23",
+          "end": "08:14",
+          "start_min": 443,
+          "end_min": 494,
+          "duration_min": 51,
+          "within_limit": true
+        }
+      ],
+      "stats": {
+        "before": {
+          "shift_minutes": 60,
+          "work_minutes": 38,
+          "idle_minutes": 22,
+          "regular_minutes": 38,
+          "express_minutes": 0,
+          "deadhead_minutes": 0,
+          "break_minutes": 0,
+          "express_trips": 0,
+          "max_continuous_work_min": 51,
+          "utilisation_pct": 63.3
+        },
+        "after": {
+          "shift_minutes": 60,
+          "work_minutes": 38,
+          "idle_minutes": 22,
+          "regular_minutes": 38,
+          "express_minutes": 0,
+          "deadhead_minutes": 0,
+          "break_minutes": 0,
+          "express_trips": 0,
+          "max_continuous_work_min": 51,
+          "utilisation_pct": 63.3
+        },
+        "express_trips": 0,
+        "idle_minutes_reclaimed": 0
+      },
+      "meta": {
+        "vehicle_number": "3962",
+        "observation_window_only": true
+      }
+    },
+    {
+      "driver_id": "BUS-3964",
+      "name": "Bus 3964 (Line 44) + its driver",
+      "is_new_hire": false,
+      "available_for_express": true,
+      "changed": false,
+      "reallocated_option_ids": [],
+      "shift_start": "07:03",
+      "shift_end": "08:03",
+      "shift_start_min": 423,
+      "shift_end_min": 483,
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "before": [
+        {
+          "type": "regular_service",
+          "label": "Line 44 Hbf -> Zerzabelshof Ost",
+          "start": "07:03",
+          "end": "07:23",
+          "start_min": 423,
+          "end_min": 443,
+          "duration_min": 20,
+          "start_iso": "2026-10-05T07:03:00",
+          "end_iso": "2026-10-05T07:23:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Zerzabelshof Ost (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2161909"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:23",
+          "end": "07:36",
+          "start_min": 443,
+          "end_min": 456,
+          "duration_min": 13,
+          "start_iso": "2026-10-05T07:23:00",
+          "end_iso": "2026-10-05T07:36:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Zerzabelshof Ost -> Hbf",
+          "start": "07:36",
+          "end": "07:54",
+          "start_min": 456,
+          "end_min": 474,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T07:36:00",
+          "end_iso": "2026-10-05T07:54:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Zerzabelshof Ost (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2161910"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "07:54",
+          "end": "08:03",
+          "start_min": 474,
+          "end_min": 483,
+          "duration_min": 9,
+          "start_iso": "2026-10-05T07:54:00",
+          "end_iso": "2026-10-05T08:03:00",
+          "counts_as_break": false
+        }
+      ],
+      "after": [
+        {
+          "type": "regular_service",
+          "label": "Line 44 Hbf -> Zerzabelshof Ost",
+          "start": "07:03",
+          "end": "07:23",
+          "start_min": 423,
+          "end_min": 443,
+          "duration_min": 20,
+          "start_iso": "2026-10-05T07:03:00",
+          "end_iso": "2026-10-05T07:23:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Zerzabelshof Ost (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2161909"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:23",
+          "end": "07:36",
+          "start_min": 443,
+          "end_min": 456,
+          "duration_min": 13,
+          "start_iso": "2026-10-05T07:23:00",
+          "end_iso": "2026-10-05T07:36:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Zerzabelshof Ost -> Hbf",
+          "start": "07:36",
+          "end": "07:54",
+          "start_min": 456,
+          "end_min": 474,
+          "duration_min": 18,
+          "start_iso": "2026-10-05T07:36:00",
+          "end_iso": "2026-10-05T07:54:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Zerzabelshof Ost (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2161910"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "07:54",
+          "end": "08:03",
+          "start_min": 474,
+          "end_min": 483,
+          "duration_min": 9,
+          "start_iso": "2026-10-05T07:54:00",
+          "end_iso": "2026-10-05T08:03:00",
+          "counts_as_break": false
+        }
+      ],
+      "breaks": [],
+      "itinerary": [
+        "07:03-07:23  Line 44 Hbf -> Zerzabelshof Ost (Nürnberg Hbf -> Zerzabelshof Ost (Nürnberg))",
+        "07:36-07:54  Line 44 Zerzabelshof Ost -> Hbf (Zerzabelshof Ost (Nürnberg) -> Nürnberg Hbf)"
+      ],
+      "continuous_work_blocks": [
+        {
+          "start": "07:03",
+          "end": "07:54",
+          "start_min": 423,
+          "end_min": 474,
+          "duration_min": 51,
+          "within_limit": true
+        }
+      ],
+      "stats": {
+        "before": {
+          "shift_minutes": 60,
+          "work_minutes": 38,
+          "idle_minutes": 22,
+          "regular_minutes": 38,
+          "express_minutes": 0,
+          "deadhead_minutes": 0,
+          "break_minutes": 0,
+          "express_trips": 0,
+          "max_continuous_work_min": 51,
+          "utilisation_pct": 63.3
+        },
+        "after": {
+          "shift_minutes": 60,
+          "work_minutes": 38,
+          "idle_minutes": 22,
+          "regular_minutes": 38,
+          "express_minutes": 0,
+          "deadhead_minutes": 0,
+          "break_minutes": 0,
+          "express_trips": 0,
+          "max_continuous_work_min": 51,
+          "utilisation_pct": 63.3
+        },
+        "express_trips": 0,
+        "idle_minutes_reclaimed": 0
+      },
+      "meta": {
+        "vehicle_number": "3964",
+        "observation_window_only": true
+      }
+    },
+    {
+      "driver_id": "BUS-620",
+      "name": "Bus 620 (Line 44) + its driver",
+      "is_new_hire": false,
+      "available_for_express": true,
+      "changed": false,
+      "reallocated_option_ids": [],
+      "shift_start": "07:13",
+      "shift_end": "08:33",
+      "shift_start_min": 433,
+      "shift_end_min": 513,
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "before": [
+        {
+          "type": "regular_service",
+          "label": "Line 44 Hbf -> Langwasser Mitte",
+          "start": "07:13",
+          "end": "07:44",
+          "start_min": 433,
+          "end_min": 464,
+          "duration_min": 31,
+          "start_iso": "2026-10-05T07:13:00",
+          "end_iso": "2026-10-05T07:44:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Langwasser Mitte (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2117788"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:44",
+          "end": "07:55",
+          "start_min": 464,
+          "end_min": 475,
+          "duration_min": 11,
+          "start_iso": "2026-10-05T07:44:00",
+          "end_iso": "2026-10-05T07:55:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Langwasser Mitte -> Hbf",
+          "start": "07:55",
+          "end": "08:24",
+          "start_min": 475,
+          "end_min": 504,
+          "duration_min": 29,
+          "start_iso": "2026-10-05T07:55:00",
+          "end_iso": "2026-10-05T08:24:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Langwasser Mitte (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2117790"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "08:24",
+          "end": "08:33",
+          "start_min": 504,
+          "end_min": 513,
+          "duration_min": 9,
+          "start_iso": "2026-10-05T08:24:00",
+          "end_iso": "2026-10-05T08:33:00",
+          "counts_as_break": false
+        }
+      ],
+      "after": [
+        {
+          "type": "regular_service",
+          "label": "Line 44 Hbf -> Langwasser Mitte",
+          "start": "07:13",
+          "end": "07:44",
+          "start_min": 433,
+          "end_min": 464,
+          "duration_min": 31,
+          "start_iso": "2026-10-05T07:13:00",
+          "end_iso": "2026-10-05T07:44:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Langwasser Mitte (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2117788"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:44",
+          "end": "07:55",
+          "start_min": 464,
+          "end_min": 475,
+          "duration_min": 11,
+          "start_iso": "2026-10-05T07:44:00",
+          "end_iso": "2026-10-05T07:55:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Langwasser Mitte -> Hbf",
+          "start": "07:55",
+          "end": "08:24",
+          "start_min": 475,
+          "end_min": 504,
+          "duration_min": 29,
+          "start_iso": "2026-10-05T07:55:00",
+          "end_iso": "2026-10-05T08:24:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Langwasser Mitte (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2117790"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "08:24",
+          "end": "08:33",
+          "start_min": 504,
+          "end_min": 513,
+          "duration_min": 9,
+          "start_iso": "2026-10-05T08:24:00",
+          "end_iso": "2026-10-05T08:33:00",
+          "counts_as_break": false
+        }
+      ],
+      "breaks": [],
+      "itinerary": [
+        "07:13-07:44  Line 44 Hbf -> Langwasser Mitte (Nürnberg Hbf -> Langwasser Mitte (Nürnberg))",
+        "07:55-08:24  Line 44 Langwasser Mitte -> Hbf (Langwasser Mitte (Nürnberg) -> Nürnberg Hbf)"
+      ],
+      "continuous_work_blocks": [
+        {
+          "start": "07:13",
+          "end": "08:24",
+          "start_min": 433,
+          "end_min": 504,
+          "duration_min": 71,
+          "within_limit": true
+        }
+      ],
+      "stats": {
+        "before": {
+          "shift_minutes": 80,
+          "work_minutes": 60,
+          "idle_minutes": 20,
+          "regular_minutes": 60,
+          "express_minutes": 0,
+          "deadhead_minutes": 0,
+          "break_minutes": 0,
+          "express_trips": 0,
+          "max_continuous_work_min": 71,
+          "utilisation_pct": 75.0
+        },
+        "after": {
+          "shift_minutes": 80,
+          "work_minutes": 60,
+          "idle_minutes": 20,
+          "regular_minutes": 60,
+          "express_minutes": 0,
+          "deadhead_minutes": 0,
+          "break_minutes": 0,
+          "express_trips": 0,
+          "max_continuous_work_min": 71,
+          "utilisation_pct": 75.0
+        },
+        "express_trips": 0,
+        "idle_minutes_reclaimed": 0
+      },
+      "meta": {
+        "vehicle_number": "620",
+        "observation_window_only": true
+      }
+    },
+    {
+      "driver_id": "BUS-631",
+      "name": "Bus 631 (Line 44) + its driver",
+      "is_new_hire": false,
+      "available_for_express": true,
+      "changed": false,
+      "reallocated_option_ids": [],
+      "shift_start": "06:33",
+      "shift_end": "07:53",
+      "shift_start_min": 393,
+      "shift_end_min": 473,
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "before": [
+        {
+          "type": "regular_service",
+          "label": "Line 44 Hbf -> Langwasser Mitte",
+          "start": "06:33",
+          "end": "07:04",
+          "start_min": 393,
+          "end_min": 424,
+          "duration_min": 31,
+          "start_iso": "2026-10-05T06:33:00",
+          "end_iso": "2026-10-05T07:04:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Langwasser Mitte (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2182704"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:04",
+          "end": "07:15",
+          "start_min": 424,
+          "end_min": 435,
+          "duration_min": 11,
+          "start_iso": "2026-10-05T07:04:00",
+          "end_iso": "2026-10-05T07:15:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Langwasser Mitte -> Hbf",
+          "start": "07:15",
+          "end": "07:44",
+          "start_min": 435,
+          "end_min": 464,
+          "duration_min": 29,
+          "start_iso": "2026-10-05T07:15:00",
+          "end_iso": "2026-10-05T07:44:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Langwasser Mitte (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2182706"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "07:44",
+          "end": "07:53",
+          "start_min": 464,
+          "end_min": 473,
+          "duration_min": 9,
+          "start_iso": "2026-10-05T07:44:00",
+          "end_iso": "2026-10-05T07:53:00",
+          "counts_as_break": false
+        }
+      ],
+      "after": [
+        {
+          "type": "regular_service",
+          "label": "Line 44 Hbf -> Langwasser Mitte",
+          "start": "06:33",
+          "end": "07:04",
+          "start_min": 393,
+          "end_min": 424,
+          "duration_min": 31,
+          "start_iso": "2026-10-05T06:33:00",
+          "end_iso": "2026-10-05T07:04:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "to": {
+            "name": "Langwasser Mitte (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2182704"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Layover",
+          "start": "07:04",
+          "end": "07:15",
+          "start_min": 424,
+          "end_min": 435,
+          "duration_min": 11,
+          "start_iso": "2026-10-05T07:04:00",
+          "end_iso": "2026-10-05T07:15:00",
+          "counts_as_break": false
+        },
+        {
+          "type": "regular_service",
+          "label": "Line 44 Langwasser Mitte -> Hbf",
+          "start": "07:15",
+          "end": "07:44",
+          "start_min": 435,
+          "end_min": 464,
+          "duration_min": 29,
+          "start_iso": "2026-10-05T07:15:00",
+          "end_iso": "2026-10-05T07:44:00",
+          "duty_type": "regular_service",
+          "from": {
+            "name": "Langwasser Mitte (Nürnberg)",
+            "lat": null,
+            "lon": null
+          },
+          "to": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "meta": {
+            "line": "44",
+            "fahrtnummer": "2182706"
+          }
+        },
+        {
+          "type": "layover",
+          "label": "Waiting at Nürnberg Hbf",
+          "start": "07:44",
+          "end": "07:53",
+          "start_min": 464,
+          "end_min": 473,
+          "duration_min": 9,
+          "start_iso": "2026-10-05T07:44:00",
+          "end_iso": "2026-10-05T07:53:00",
+          "counts_as_break": false
+        }
+      ],
+      "breaks": [],
+      "itinerary": [
+        "06:33-07:04  Line 44 Hbf -> Langwasser Mitte (Nürnberg Hbf -> Langwasser Mitte (Nürnberg))",
+        "07:15-07:44  Line 44 Langwasser Mitte -> Hbf (Langwasser Mitte (Nürnberg) -> Nürnberg Hbf)"
+      ],
+      "continuous_work_blocks": [
+        {
+          "start": "06:33",
+          "end": "07:44",
+          "start_min": 393,
+          "end_min": 464,
+          "duration_min": 71,
+          "within_limit": true
+        }
+      ],
+      "stats": {
+        "before": {
+          "shift_minutes": 80,
+          "work_minutes": 60,
+          "idle_minutes": 20,
+          "regular_minutes": 60,
+          "express_minutes": 0,
+          "deadhead_minutes": 0,
+          "break_minutes": 0,
+          "express_trips": 0,
+          "max_continuous_work_min": 71,
+          "utilisation_pct": 75.0
+        },
+        "after": {
+          "shift_minutes": 80,
+          "work_minutes": 60,
+          "idle_minutes": 20,
+          "regular_minutes": 60,
+          "express_minutes": 0,
+          "deadhead_minutes": 0,
+          "break_minutes": 0,
+          "express_trips": 0,
+          "max_continuous_work_min": 71,
+          "utilisation_pct": 75.0
+        },
+        "express_trips": 0,
+        "idle_minutes_reclaimed": 0
+      },
+      "meta": {
+        "vehicle_number": "631",
+        "observation_window_only": true
+      }
+    }
+  ],
+  "gantt": [
+    {
+      "driver_id": "BUS-248",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Hbf -> Langwasser Mitte",
+      "start_iso": "2026-10-05T06:53:00",
+      "end_iso": "2026-10-05T07:24:00",
+      "start_min": 413,
+      "end_min": 444
+    },
+    {
+      "driver_id": "BUS-248",
+      "phase": "before",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:24:00",
+      "end_iso": "2026-10-05T07:35:00",
+      "start_min": 444,
+      "end_min": 455
+    },
+    {
+      "driver_id": "BUS-248",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Langwasser Mitte -> Hbf",
+      "start_iso": "2026-10-05T07:35:00",
+      "end_iso": "2026-10-05T08:04:00",
+      "start_min": 455,
+      "end_min": 484
+    },
+    {
+      "driver_id": "BUS-248",
+      "phase": "before",
+      "type": "layover",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:04:00",
+      "end_iso": "2026-10-05T08:13:00",
+      "start_min": 484,
+      "end_min": 493
+    },
+    {
+      "driver_id": "BUS-248",
+      "phase": "after",
+      "type": "idle",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T06:53:00",
+      "end_iso": "2026-10-05T07:13:00",
+      "start_min": 413,
+      "end_min": 433
+    },
+    {
+      "driver_id": "BUS-248",
+      "phase": "after",
+      "type": "deadhead",
+      "label": "Bus changeover at Nürnberg Hbf",
+      "start_iso": "2026-10-05T07:13:00",
+      "end_iso": "2026-10-05T07:15:00",
+      "start_min": 433,
+      "end_min": 435
+    },
+    {
+      "driver_id": "BUS-248",
+      "phase": "after",
+      "type": "express",
+      "label": "X30 Nürnberg Hbf -> Nürnberg Nordostpark",
+      "start_iso": "2026-10-05T07:15:00",
+      "end_iso": "2026-10-05T07:33:00",
+      "start_min": 435,
+      "end_min": 453
+    },
+    {
+      "driver_id": "BUS-248",
+      "phase": "after",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:33:00",
+      "end_iso": "2026-10-05T07:38:00",
+      "start_min": 453,
+      "end_min": 458
+    },
+    {
+      "driver_id": "BUS-248",
+      "phase": "after",
+      "type": "express",
+      "label": "X30 Nürnberg Nordostpark -> Nürnberg Hbf",
+      "start_iso": "2026-10-05T07:38:00",
+      "end_iso": "2026-10-05T07:56:00",
+      "start_min": 458,
+      "end_min": 476
+    },
+    {
+      "driver_id": "BUS-248",
+      "phase": "after",
+      "type": "deadhead",
+      "label": "Bus changeover at Nürnberg Hbf",
+      "start_iso": "2026-10-05T07:56:00",
+      "end_iso": "2026-10-05T07:58:00",
+      "start_min": 476,
+      "end_min": 478
+    },
+    {
+      "driver_id": "BUS-248",
+      "phase": "after",
+      "type": "idle",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T07:58:00",
+      "end_iso": "2026-10-05T08:13:00",
+      "start_min": 478,
+      "end_min": 493
+    },
+    {
+      "driver_id": "BUS-281",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Hbf -> Langwasser Mitte",
+      "start_iso": "2026-10-05T07:33:00",
+      "end_iso": "2026-10-05T08:04:00",
+      "start_min": 453,
+      "end_min": 484
+    },
+    {
+      "driver_id": "BUS-281",
+      "phase": "before",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T08:04:00",
+      "end_iso": "2026-10-05T08:15:00",
+      "start_min": 484,
+      "end_min": 495
+    },
+    {
+      "driver_id": "BUS-281",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Langwasser Mitte -> Hbf",
+      "start_iso": "2026-10-05T08:15:00",
+      "end_iso": "2026-10-05T08:44:00",
+      "start_min": 495,
+      "end_min": 524
+    },
+    {
+      "driver_id": "BUS-281",
+      "phase": "before",
+      "type": "layover",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:44:00",
+      "end_iso": "2026-10-05T08:53:00",
+      "start_min": 524,
+      "end_min": 533
+    },
+    {
+      "driver_id": "BUS-281",
+      "phase": "after",
+      "type": "idle",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T07:33:00",
+      "end_iso": "2026-10-05T08:08:00",
+      "start_min": 453,
+      "end_min": 488
+    },
+    {
+      "driver_id": "BUS-281",
+      "phase": "after",
+      "type": "deadhead",
+      "label": "Bus changeover at Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:08:00",
+      "end_iso": "2026-10-05T08:10:00",
+      "start_min": 488,
+      "end_min": 490
+    },
+    {
+      "driver_id": "BUS-281",
+      "phase": "after",
+      "type": "express",
+      "label": "X30 Nürnberg Hbf -> Nürnberg Nordostpark",
+      "start_iso": "2026-10-05T08:10:00",
+      "end_iso": "2026-10-05T08:28:00",
+      "start_min": 490,
+      "end_min": 508
+    },
+    {
+      "driver_id": "BUS-281",
+      "phase": "after",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T08:28:00",
+      "end_iso": "2026-10-05T08:33:00",
+      "start_min": 508,
+      "end_min": 513
+    },
+    {
+      "driver_id": "BUS-281",
+      "phase": "after",
+      "type": "express",
+      "label": "X30 Nürnberg Nordostpark -> Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:33:00",
+      "end_iso": "2026-10-05T08:51:00",
+      "start_min": 513,
+      "end_min": 531
+    },
+    {
+      "driver_id": "BUS-281",
+      "phase": "after",
+      "type": "deadhead",
+      "label": "Bus changeover at Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:51:00",
+      "end_iso": "2026-10-05T08:53:00",
+      "start_min": 531,
+      "end_min": 533
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Hbf -> Zerzabelshof Ost",
+      "start_iso": "2026-10-05T06:43:00",
+      "end_iso": "2026-10-05T07:03:00",
+      "start_min": 403,
+      "end_min": 423
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "before",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:03:00",
+      "end_iso": "2026-10-05T07:16:00",
+      "start_min": 423,
+      "end_min": 436
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Zerzabelshof Ost -> Hbf",
+      "start_iso": "2026-10-05T07:16:00",
+      "end_iso": "2026-10-05T07:34:00",
+      "start_min": 436,
+      "end_min": 454
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "before",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:34:00",
+      "end_iso": "2026-10-05T07:43:00",
+      "start_min": 454,
+      "end_min": 463
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Hbf -> Zerzabelshof Ost",
+      "start_iso": "2026-10-05T07:43:00",
+      "end_iso": "2026-10-05T08:03:00",
+      "start_min": 463,
+      "end_min": 483
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "before",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T08:03:00",
+      "end_iso": "2026-10-05T08:16:00",
+      "start_min": 483,
+      "end_min": 496
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Zerzabelshof Ost -> Hbf",
+      "start_iso": "2026-10-05T08:16:00",
+      "end_iso": "2026-10-05T08:34:00",
+      "start_min": 496,
+      "end_min": 514
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "before",
+      "type": "layover",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:34:00",
+      "end_iso": "2026-10-05T08:43:00",
+      "start_min": 514,
+      "end_min": 523
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "after",
+      "type": "deadhead",
+      "label": "Bus changeover at Nürnberg Hbf",
+      "start_iso": "2026-10-05T06:43:00",
+      "end_iso": "2026-10-05T06:45:00",
+      "start_min": 403,
+      "end_min": 405
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "after",
+      "type": "express",
+      "label": "X30 Nürnberg Hbf -> Nürnberg Nordostpark",
+      "start_iso": "2026-10-05T06:45:00",
+      "end_iso": "2026-10-05T07:03:00",
+      "start_min": 405,
+      "end_min": 423
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "after",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:03:00",
+      "end_iso": "2026-10-05T07:08:00",
+      "start_min": 423,
+      "end_min": 428
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "after",
+      "type": "express",
+      "label": "X30 Nürnberg Nordostpark -> Nürnberg Hbf",
+      "start_iso": "2026-10-05T07:08:00",
+      "end_iso": "2026-10-05T07:26:00",
+      "start_min": 428,
+      "end_min": 446
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "after",
+      "type": "deadhead",
+      "label": "Bus changeover at Nürnberg Hbf",
+      "start_iso": "2026-10-05T07:26:00",
+      "end_iso": "2026-10-05T07:28:00",
+      "start_min": 446,
+      "end_min": 448
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "after",
+      "type": "break",
+      "label": "Break (15 min)",
+      "start_iso": "2026-10-05T07:28:00",
+      "end_iso": "2026-10-05T07:43:00",
+      "start_min": 448,
+      "end_min": 463
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "after",
+      "type": "deadhead",
+      "label": "Bus changeover at Nürnberg Hbf",
+      "start_iso": "2026-10-05T07:43:00",
+      "end_iso": "2026-10-05T07:45:00",
+      "start_min": 463,
+      "end_min": 465
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "after",
+      "type": "express",
+      "label": "X30 Nürnberg Hbf -> Nürnberg Nordostpark",
+      "start_iso": "2026-10-05T07:45:00",
+      "end_iso": "2026-10-05T08:03:00",
+      "start_min": 465,
+      "end_min": 483
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "after",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T08:03:00",
+      "end_iso": "2026-10-05T08:08:00",
+      "start_min": 483,
+      "end_min": 488
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "after",
+      "type": "express",
+      "label": "X30 Nürnberg Nordostpark -> Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:08:00",
+      "end_iso": "2026-10-05T08:26:00",
+      "start_min": 488,
+      "end_min": 506
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "after",
+      "type": "deadhead",
+      "label": "Bus changeover at Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:26:00",
+      "end_iso": "2026-10-05T08:28:00",
+      "start_min": 506,
+      "end_min": 508
+    },
+    {
+      "driver_id": "BUS-3960",
+      "phase": "after",
+      "type": "idle",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:28:00",
+      "end_iso": "2026-10-05T08:43:00",
+      "start_min": 508,
+      "end_min": 523
+    },
+    {
+      "driver_id": "BUS-3962",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Hbf -> Zerzabelshof Ost",
+      "start_iso": "2026-10-05T07:23:00",
+      "end_iso": "2026-10-05T07:43:00",
+      "start_min": 443,
+      "end_min": 463
+    },
+    {
+      "driver_id": "BUS-3962",
+      "phase": "before",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:43:00",
+      "end_iso": "2026-10-05T07:56:00",
+      "start_min": 463,
+      "end_min": 476
+    },
+    {
+      "driver_id": "BUS-3962",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Zerzabelshof Ost -> Hbf",
+      "start_iso": "2026-10-05T07:56:00",
+      "end_iso": "2026-10-05T08:14:00",
+      "start_min": 476,
+      "end_min": 494
+    },
+    {
+      "driver_id": "BUS-3962",
+      "phase": "before",
+      "type": "layover",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:14:00",
+      "end_iso": "2026-10-05T08:23:00",
+      "start_min": 494,
+      "end_min": 503
+    },
+    {
+      "driver_id": "BUS-3962",
+      "phase": "after",
+      "type": "regular_service",
+      "label": "Line 44 Hbf -> Zerzabelshof Ost",
+      "start_iso": "2026-10-05T07:23:00",
+      "end_iso": "2026-10-05T07:43:00",
+      "start_min": 443,
+      "end_min": 463
+    },
+    {
+      "driver_id": "BUS-3962",
+      "phase": "after",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:43:00",
+      "end_iso": "2026-10-05T07:56:00",
+      "start_min": 463,
+      "end_min": 476
+    },
+    {
+      "driver_id": "BUS-3962",
+      "phase": "after",
+      "type": "regular_service",
+      "label": "Line 44 Zerzabelshof Ost -> Hbf",
+      "start_iso": "2026-10-05T07:56:00",
+      "end_iso": "2026-10-05T08:14:00",
+      "start_min": 476,
+      "end_min": 494
+    },
+    {
+      "driver_id": "BUS-3962",
+      "phase": "after",
+      "type": "layover",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:14:00",
+      "end_iso": "2026-10-05T08:23:00",
+      "start_min": 494,
+      "end_min": 503
+    },
+    {
+      "driver_id": "BUS-3964",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Hbf -> Zerzabelshof Ost",
+      "start_iso": "2026-10-05T07:03:00",
+      "end_iso": "2026-10-05T07:23:00",
+      "start_min": 423,
+      "end_min": 443
+    },
+    {
+      "driver_id": "BUS-3964",
+      "phase": "before",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:23:00",
+      "end_iso": "2026-10-05T07:36:00",
+      "start_min": 443,
+      "end_min": 456
+    },
+    {
+      "driver_id": "BUS-3964",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Zerzabelshof Ost -> Hbf",
+      "start_iso": "2026-10-05T07:36:00",
+      "end_iso": "2026-10-05T07:54:00",
+      "start_min": 456,
+      "end_min": 474
+    },
+    {
+      "driver_id": "BUS-3964",
+      "phase": "before",
+      "type": "layover",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T07:54:00",
+      "end_iso": "2026-10-05T08:03:00",
+      "start_min": 474,
+      "end_min": 483
+    },
+    {
+      "driver_id": "BUS-3964",
+      "phase": "after",
+      "type": "regular_service",
+      "label": "Line 44 Hbf -> Zerzabelshof Ost",
+      "start_iso": "2026-10-05T07:03:00",
+      "end_iso": "2026-10-05T07:23:00",
+      "start_min": 423,
+      "end_min": 443
+    },
+    {
+      "driver_id": "BUS-3964",
+      "phase": "after",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:23:00",
+      "end_iso": "2026-10-05T07:36:00",
+      "start_min": 443,
+      "end_min": 456
+    },
+    {
+      "driver_id": "BUS-3964",
+      "phase": "after",
+      "type": "regular_service",
+      "label": "Line 44 Zerzabelshof Ost -> Hbf",
+      "start_iso": "2026-10-05T07:36:00",
+      "end_iso": "2026-10-05T07:54:00",
+      "start_min": 456,
+      "end_min": 474
+    },
+    {
+      "driver_id": "BUS-3964",
+      "phase": "after",
+      "type": "layover",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T07:54:00",
+      "end_iso": "2026-10-05T08:03:00",
+      "start_min": 474,
+      "end_min": 483
+    },
+    {
+      "driver_id": "BUS-620",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Hbf -> Langwasser Mitte",
+      "start_iso": "2026-10-05T07:13:00",
+      "end_iso": "2026-10-05T07:44:00",
+      "start_min": 433,
+      "end_min": 464
+    },
+    {
+      "driver_id": "BUS-620",
+      "phase": "before",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:44:00",
+      "end_iso": "2026-10-05T07:55:00",
+      "start_min": 464,
+      "end_min": 475
+    },
+    {
+      "driver_id": "BUS-620",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Langwasser Mitte -> Hbf",
+      "start_iso": "2026-10-05T07:55:00",
+      "end_iso": "2026-10-05T08:24:00",
+      "start_min": 475,
+      "end_min": 504
+    },
+    {
+      "driver_id": "BUS-620",
+      "phase": "before",
+      "type": "layover",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:24:00",
+      "end_iso": "2026-10-05T08:33:00",
+      "start_min": 504,
+      "end_min": 513
+    },
+    {
+      "driver_id": "BUS-620",
+      "phase": "after",
+      "type": "regular_service",
+      "label": "Line 44 Hbf -> Langwasser Mitte",
+      "start_iso": "2026-10-05T07:13:00",
+      "end_iso": "2026-10-05T07:44:00",
+      "start_min": 433,
+      "end_min": 464
+    },
+    {
+      "driver_id": "BUS-620",
+      "phase": "after",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:44:00",
+      "end_iso": "2026-10-05T07:55:00",
+      "start_min": 464,
+      "end_min": 475
+    },
+    {
+      "driver_id": "BUS-620",
+      "phase": "after",
+      "type": "regular_service",
+      "label": "Line 44 Langwasser Mitte -> Hbf",
+      "start_iso": "2026-10-05T07:55:00",
+      "end_iso": "2026-10-05T08:24:00",
+      "start_min": 475,
+      "end_min": 504
+    },
+    {
+      "driver_id": "BUS-620",
+      "phase": "after",
+      "type": "layover",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T08:24:00",
+      "end_iso": "2026-10-05T08:33:00",
+      "start_min": 504,
+      "end_min": 513
+    },
+    {
+      "driver_id": "BUS-631",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Hbf -> Langwasser Mitte",
+      "start_iso": "2026-10-05T06:33:00",
+      "end_iso": "2026-10-05T07:04:00",
+      "start_min": 393,
+      "end_min": 424
+    },
+    {
+      "driver_id": "BUS-631",
+      "phase": "before",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:04:00",
+      "end_iso": "2026-10-05T07:15:00",
+      "start_min": 424,
+      "end_min": 435
+    },
+    {
+      "driver_id": "BUS-631",
+      "phase": "before",
+      "type": "regular_service",
+      "label": "Line 44 Langwasser Mitte -> Hbf",
+      "start_iso": "2026-10-05T07:15:00",
+      "end_iso": "2026-10-05T07:44:00",
+      "start_min": 435,
+      "end_min": 464
+    },
+    {
+      "driver_id": "BUS-631",
+      "phase": "before",
+      "type": "layover",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T07:44:00",
+      "end_iso": "2026-10-05T07:53:00",
+      "start_min": 464,
+      "end_min": 473
+    },
+    {
+      "driver_id": "BUS-631",
+      "phase": "after",
+      "type": "regular_service",
+      "label": "Line 44 Hbf -> Langwasser Mitte",
+      "start_iso": "2026-10-05T06:33:00",
+      "end_iso": "2026-10-05T07:04:00",
+      "start_min": 393,
+      "end_min": 424
+    },
+    {
+      "driver_id": "BUS-631",
+      "phase": "after",
+      "type": "layover",
+      "label": "Layover",
+      "start_iso": "2026-10-05T07:04:00",
+      "end_iso": "2026-10-05T07:15:00",
+      "start_min": 424,
+      "end_min": 435
+    },
+    {
+      "driver_id": "BUS-631",
+      "phase": "after",
+      "type": "regular_service",
+      "label": "Line 44 Langwasser Mitte -> Hbf",
+      "start_iso": "2026-10-05T07:15:00",
+      "end_iso": "2026-10-05T07:44:00",
+      "start_min": 435,
+      "end_min": 464
+    },
+    {
+      "driver_id": "BUS-631",
+      "phase": "after",
+      "type": "layover",
+      "label": "Waiting at Nürnberg Hbf",
+      "start_iso": "2026-10-05T07:44:00",
+      "end_iso": "2026-10-05T07:53:00",
+      "start_min": 464,
+      "end_min": 473
+    }
+  ],
+  "dedicated_staffing_baseline": {
+    "drivers_needed": 2,
+    "trips": 8,
+    "trips_covered": 8,
+    "complete": true,
+    "status": "OPTIMAL",
+    "method": "Same CP-SAT model with only new hires on dedicated split shifts covering the express service windows; minimises the number of hires."
+  },
+  "scenarios": [],
+  "map": {
+    "express_routes": [
+      {
+        "route_id": "X30",
+        "name": "Nürnberg Hbf – Nordostpark Express",
+        "origin": {
+          "name": "Nürnberg Hbf",
+          "lat": 49.44725111,
+          "lon": 11.08189,
+          "stop_id": "510"
+        },
+        "destination": {
+          "name": "Nürnberg Nordostpark",
+          "lat": 49.48914307,
+          "lon": 11.12585039,
+          "stop_id": "de:09564:1372"
+        }
+      }
+    ],
+    "demand_hubs": [
+      {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510",
+        "id": "HBF",
+        "type": "regional_transit_gateway",
+        "demand_weight": 1.0
+      },
+      {
+        "name": "Nürnberg Nordostpark",
+        "lat": 49.48914307,
+        "lon": 11.12585039,
+        "stop_id": "de:09564:1372",
+        "id": "NORDOSTPARK",
+        "type": "employment_cluster",
+        "demand_weight": 1.0
+      },
+      {
+        "name": "Nürnberg Herrnhütte",
+        "lat": 49.47876082,
+        "lon": 11.11012987,
+        "id": "HERRNHUETTE",
+        "type": "feeder_transit_node",
+        "demand_weight": 0.75
+      },
+      {
+        "name": "Nürnberg Nordostbahnhof",
+        "lat": 49.47273122,
+        "lon": 11.1040393,
+        "id": "NORDOSTBAHNHOF",
+        "type": "feeder_transit_node",
+        "demand_weight": 0.7
+      }
+    ]
+  },
+  "warnings": [],
+  "compliance": {
+    "passed": true,
+    "checks": [
+      {
+        "name": "solver_status",
+        "passed": true,
+        "detail": "status=OPTIMAL"
+      },
+      {
+        "name": "zero_new_staff",
+        "passed": true,
+        "detail": "7 existing drivers, 0 new hires (allowed 0)"
+      },
+      {
+        "name": "all_drivers_reported",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "reallocation_limits",
+        "passed": true,
+        "detail": "4 trip pairs reallocated, max 1 in a row per branch"
+      },
+      {
+        "name": "timeline_integrity",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "regular_service_unchanged",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "break_rules",
+        "passed": true,
+        "detail": "<= 240 min continuous work, >= 15-min breaks, ArbZG s.4 totals, daily cap"
+      },
+      {
+        "name": "location_continuity",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "transfer_times",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "timetable_match",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "name": "each_trip_one_driver",
+        "passed": true,
+        "detail": "8 trips, each driven by exactly one driver"
+      },
+      {
+        "name": "kpi_consistency",
+        "passed": true,
+        "detail": "kpi=8 segments=8 listed=8"
+      }
+    ],
+    "issues": [],
+    "violations_after": 0,
+    "pre_existing_noncompliant_drivers": 0
+  },
+  "staffing_curve": [],
+  "reallocation_curve": [
+    {
+      "max_reallocations": 0,
+      "reallocated": 0,
+      "express_trips": 0,
+      "express_departures_outbound": 0,
+      "max_passenger_wait_min": 150,
+      "branch_headways": [
+        {
+          "group": "Line 44 -> Langwasser Mitte",
+          "departures": 4,
+          "reallocated": 0,
+          "max_headway_before_min": 20,
+          "max_headway_after_min": 20
+        },
+        {
+          "group": "Line 44 -> Zerzabelshof Ost",
+          "departures": 4,
+          "reallocated": 0,
+          "max_headway_before_min": 20,
+          "max_headway_after_min": 20
+        }
+      ],
+      "status": "OPTIMAL"
+    },
+    {
+      "max_reallocations": 1,
+      "reallocated": 1,
+      "express_trips": 2,
+      "express_departures_outbound": 1,
+      "max_passenger_wait_min": 103,
+      "branch_headways": [
+        {
+          "group": "Line 44 -> Langwasser Mitte",
+          "departures": 4,
+          "reallocated": 1,
+          "max_headway_before_min": 20,
+          "max_headway_after_min": 40
+        },
+        {
+          "group": "Line 44 -> Zerzabelshof Ost",
+          "departures": 4,
+          "reallocated": 0,
+          "max_headway_before_min": 20,
+          "max_headway_after_min": 20
+        }
+      ],
+      "status": "OPTIMAL"
+    },
+    {
+      "max_reallocations": 2,
+      "reallocated": 2,
+      "express_trips": 4,
+      "express_departures_outbound": 2,
+      "max_passenger_wait_min": 71,
+      "branch_headways": [
+        {
+          "group": "Line 44 -> Langwasser Mitte",
+          "departures": 4,
+          "reallocated": 0,
+          "max_headway_before_min": 20,
+          "max_headway_after_min": 20
+        },
+        {
+          "group": "Line 44 -> Zerzabelshof Ost",
+          "departures": 4,
+          "reallocated": 2,
+          "max_headway_before_min": 20,
+          "max_headway_after_min": 40
+        }
+      ],
+      "status": "OPTIMAL"
+    },
+    {
+      "max_reallocations": 3,
+      "reallocated": 3,
+      "express_trips": 6,
+      "express_departures_outbound": 3,
+      "max_passenger_wait_min": 61,
+      "branch_headways": [
+        {
+          "group": "Line 44 -> Langwasser Mitte",
+          "departures": 4,
+          "reallocated": 1,
+          "max_headway_before_min": 20,
+          "max_headway_after_min": 40
+        },
+        {
+          "group": "Line 44 -> Zerzabelshof Ost",
+          "departures": 4,
+          "reallocated": 2,
+          "max_headway_before_min": 20,
+          "max_headway_after_min": 40
+        }
+      ],
+      "status": "OPTIMAL"
+    },
+    {
+      "max_reallocations": 4,
+      "reallocated": 4,
+      "express_trips": 8,
+      "express_departures_outbound": 4,
+      "max_passenger_wait_min": 50,
+      "branch_headways": [
+        {
+          "group": "Line 44 -> Langwasser Mitte",
+          "departures": 4,
+          "reallocated": 2,
+          "max_headway_before_min": 20,
+          "max_headway_after_min": 40
+        },
+        {
+          "group": "Line 44 -> Zerzabelshof Ost",
+          "departures": 4,
+          "reallocated": 2,
+          "max_headway_before_min": 20,
+          "max_headway_after_min": 40
+        }
+      ],
+      "status": "OPTIMAL"
+    },
+    {
+      "max_reallocations": 5,
+      "reallocated": 4,
+      "express_trips": 8,
+      "express_departures_outbound": 4,
+      "max_passenger_wait_min": 50,
+      "branch_headways": [
+        {
+          "group": "Line 44 -> Langwasser Mitte",
+          "departures": 4,
+          "reallocated": 2,
+          "max_headway_before_min": 20,
+          "max_headway_after_min": 40
+        },
+        {
+          "group": "Line 44 -> Zerzabelshof Ost",
+          "departures": 4,
+          "reallocated": 2,
+          "max_headway_before_min": 20,
+          "max_headway_after_min": 40
+        }
+      ],
+      "status": "OPTIMAL"
+    }
+  ]
+}

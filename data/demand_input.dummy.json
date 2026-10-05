@@ -1,0 +1,122 @@
+{
+  "meta": {
+    "scenario_name": "Hero Express X1 - hand-typed dummy (5 drivers)",
+    "service_date": "2026-10-06",
+    "source": "manual dummy for backend development; coordinates from OpenStreetMap/Nominatim, '(approx.)' = rough",
+    "timezone": "Europe/Berlin",
+    "contract_version": "1.0"
+  },
+  "rules": {
+    "max_continuous_work_min": 240,
+    "min_break_min": 15,
+    "max_new_drivers": 0,
+    "min_layover_min": 5,
+    "changeover_min": 5
+  },
+  "express_route": {
+    "route_id": "X1",
+    "name": "Hero Express X1: Langwasser Mitte <-> Nordostpark",
+    "origin": {"name": "Langwasser Mitte", "lat": 49.4046, "lon": 11.1319},
+    "destination": {"name": "Nordostpark", "lat": 49.4866, "lon": 11.1285},
+    "travel_time_min": 25,
+    "bidirectional": true,
+    "timetable_mode": "fixed",
+    "service_windows": [
+      {"label": "AM peak", "start": "06:30", "end": "09:00", "headway_min": 20,
+       "demand_weight": {"outbound": 3, "inbound": 1}},
+      {"label": "PM peak", "start": "15:30", "end": "18:00", "headway_min": 20,
+       "demand_weight": {"outbound": 1, "inbound": 3}}
+    ]
+  },
+  "drivers": [
+    {
+      "driver_id": "D01",
+      "name": "Early shift, line 36",
+      "shift_start": "05:00",
+      "shift_end": "13:30",
+      "depot": {"name": "Bus depot (approx.)", "lat": 49.4300, "lon": 11.0450},
+      "work_blocks": [
+        {"start": "05:00", "end": "06:10", "line": "36",
+         "start_location": {"name": "Plaerrer (approx.)", "lat": 49.4482, "lon": 11.0675},
+         "end_location": {"name": "Doku-Zentrum (approx.)", "lat": 49.4313, "lon": 11.1120}},
+        {"start": "08:40", "end": "11:30", "line": "36",
+         "start_location": {"name": "Doku-Zentrum (approx.)", "lat": 49.4313, "lon": 11.1120},
+         "end_location": {"name": "Plaerrer (approx.)", "lat": 49.4482, "lon": 11.0675}},
+        {"start": "12:00", "end": "13:30", "line": "36",
+         "start_location": {"name": "Plaerrer (approx.)", "lat": 49.4482, "lon": 11.0675},
+         "end_location": {"name": "Bus depot (approx.)", "lat": 49.4300, "lon": 11.0450}}
+      ]
+    },
+    {
+      "driver_id": "D02",
+      "name": "Split shift, line 65",
+      "shift_start": "05:30",
+      "shift_end": "19:00",
+      "work_blocks": [
+        {"start": "05:30", "end": "08:00", "line": "65",
+         "start_location": {"name": "Roethenbach", "lat": 49.4209, "lon": 11.0316},
+         "end_location": {"name": "Nordostbahnhof (approx.)", "lat": 49.4700, "lon": 11.1030}},
+        {"start": "14:30", "end": "16:00", "line": "65",
+         "start_location": {"name": "Nordostbahnhof (approx.)", "lat": 49.4700, "lon": 11.1030},
+         "end_location": {"name": "Nordostbahnhof (approx.)", "lat": 49.4700, "lon": 11.1030}},
+        {"start": "17:30", "end": "19:00", "line": "65",
+         "start_location": {"name": "Nordostbahnhof (approx.)", "lat": 49.4700, "lon": 11.1030},
+         "end_location": {"name": "Roethenbach", "lat": 49.4209, "lon": 11.0316}}
+      ]
+    },
+    {
+      "driver_id": "D03",
+      "name": "Late shift, line 45",
+      "shift_start": "13:30",
+      "shift_end": "22:00",
+      "work_blocks": [
+        {"start": "13:30", "end": "15:20", "line": "45",
+         "start_location": {"name": "Frankenstrasse (approx.)", "lat": 49.4258, "lon": 11.0868},
+         "end_location": {"name": "Ziegelstein (approx.)", "lat": 49.4855, "lon": 11.1077}},
+        {"start": "17:40", "end": "19:40", "line": "45",
+         "start_location": {"name": "Ziegelstein (approx.)", "lat": 49.4855, "lon": 11.1077},
+         "end_location": {"name": "Frankenstrasse (approx.)", "lat": 49.4258, "lon": 11.0868}},
+        {"start": "20:00", "end": "22:00", "line": "45",
+         "start_location": {"name": "Frankenstrasse (approx.)", "lat": 49.4258, "lon": 11.0868},
+         "end_location": {"name": "Frankenstrasse (approx.)", "lat": 49.4258, "lon": 11.0868}}
+      ]
+    },
+    {
+      "driver_id": "D04",
+      "name": "Reserve / standby driver",
+      "shift_start": "06:00",
+      "shift_end": "14:00",
+      "idle_gaps": [
+        {"start": "06:00", "end": "14:00",
+         "location": {"name": "Bus depot (approx.)", "lat": 49.4300, "lon": 11.0450}}
+      ]
+    },
+    {
+      "driver_id": "D05",
+      "name": "Middle shift, line 36",
+      "shift_start": "09:00",
+      "shift_end": "17:30",
+      "depot": {"name": "Bus depot (approx.)", "lat": 49.4300, "lon": 11.0450},
+      "work_blocks": [
+        {"start": "09:00", "end": "12:00", "line": "36",
+         "start_location": {"name": "Bus depot (approx.)", "lat": 49.4300, "lon": 11.0450},
+         "end_location": {"name": "Plaerrer (approx.)", "lat": 49.4482, "lon": 11.0675}},
+        {"start": "12:30", "end": "15:00", "line": "36",
+         "start_location": {"name": "Plaerrer (approx.)", "lat": 49.4482, "lon": 11.0675},
+         "end_location": {"name": "Doku-Zentrum (approx.)", "lat": 49.4313, "lon": 11.1120}}
+      ]
+    }
+  ],
+  "demand_hubs": [
+    {"name": "Nordostpark (Fraunhofer IIS & business park)", "lat": 49.4866, "lon": 11.1285, "employees": null},
+    {"name": "Siemens Moorenbrunn", "lat": 49.3990, "lon": 11.1627, "employees": 7200,
+     "note": "Siemens total in Nuernberg (infranken.de 2021)"},
+    {"name": "DATEV (Paumgartnerstr.)", "lat": 49.4524, "lon": 11.0491, "employees": 7200},
+    {"name": "MAN Truck & Bus Werk Nuernberg", "lat": 49.4251, "lon": 11.0726, "employees": 3600}
+  ],
+  "residential_zones": [
+    {"name": "Langwasser", "lat": 49.4046, "lon": 11.1319},
+    {"name": "Roethenbach b. Schweinau", "lat": 49.4218, "lon": 11.0289},
+    {"name": "Gebersdorf", "lat": 49.4288, "lon": 11.0130}
+  ]
+}

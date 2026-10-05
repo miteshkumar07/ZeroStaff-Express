@@ -1,0 +1,566 @@
+{
+  "meta": {
+    "scenario_name": "X30 Nürnberg Hbf – Nordostpark Express - real VAG PULS data",
+    "service_date": "2026-10-05",
+    "source": "VAG PULS API (morning departures, Fahrtverlauf, verified return legs) + VGN GTFS",
+    "contract_version": "1.0",
+    "mode": "trip_reallocation",
+    "observed_operations": {
+      "morning_puls_departures": 30,
+      "observed_vehicles": 12,
+      "verified_vehicle_returns": 29,
+      "verification_rate": 0.967
+    },
+    "operational_patterns": [
+      {
+        "pattern_id": "43_passauer",
+        "label": [
+          "43",
+          "Passauer Str. (Nürnberg)"
+        ],
+        "observations": 14,
+        "observed_outbound_minutes": [
+          17.0
+        ],
+        "observed_terminal_turnaround_minutes": [
+          1.0
+        ],
+        "observed_full_cycle_minutes": [
+          31.0
+        ]
+      },
+      {
+        "pattern_id": "44_langwasser_mitte",
+        "label": [
+          "44",
+          "Langwasser Mitte (Nürnberg)"
+        ],
+        "observations": 8,
+        "observed_outbound_minutes": [
+          31.0
+        ],
+        "observed_terminal_turnaround_minutes": [
+          11.0
+        ],
+        "observed_full_cycle_minutes": [
+          71.0
+        ]
+      },
+      {
+        "pattern_id": "44_zerzabelshof_ost",
+        "label": [
+          "44",
+          "Zerzabelshof Ost (Nürnberg)"
+        ],
+        "observations": 7,
+        "observed_outbound_minutes": [
+          20.0
+        ],
+        "observed_terminal_turnaround_minutes": [
+          13.0
+        ],
+        "observed_full_cycle_minutes": [
+          51.0
+        ]
+      }
+    ],
+    "objective": {
+      "primary": "maximize access to Nordostpark during morning peak",
+      "secondary": "minimize disruption to existing Line 43/44 service",
+      "resource_constraint": "use existing operational resources"
+    },
+    "validation_required": [
+      "VAG vehicle circulation approval",
+      "VAG driver duty approval",
+      "legal/contractual break validation",
+      "operational turnaround validation",
+      "passenger impact of any replaced trip"
+    ],
+    "assumptions": [
+      "Each bus keeps its own driver; driver duty outside the observed window is not in the data.",
+      "A reallocated round trip must bring the bus back to Hbf before its next scheduled departure.",
+      "X30 one-way 18 min, 5 min turnaround at Nordostpark, 2 min to change destination.",
+      "Counter-peak trips (Nordostpark -> Hbf) weighted 0.25 of peak direction.",
+      "X30 target: a departure at least every 30 min, never closer than 10 min.",
+      "Demand weights are structural proxies, not measured passenger OD counts."
+    ]
+  },
+  "rules": {
+    "max_new_drivers": 0,
+    "changeover_min": 2,
+    "min_layover_min": 5,
+    "max_consecutive_replacements_per_group": 1
+  },
+  "express_route": {
+    "route_id": "X30",
+    "name": "Nürnberg Hbf – Nordostpark Express",
+    "origin": {
+      "name": "Nürnberg Hbf",
+      "lat": 49.44725111,
+      "lon": 11.08189,
+      "stop_id": "510"
+    },
+    "destination": {
+      "name": "Nürnberg Nordostpark",
+      "lat": 49.48914307,
+      "lon": 11.12585039,
+      "stop_id": "de:09564:1372"
+    },
+    "travel_time_min": 18,
+    "bidirectional": true,
+    "timetable_mode": "flexible",
+    "candidate_step_min": 1,
+    "service_windows": [
+      {
+        "label": "AM peak",
+        "start": "06:30",
+        "end": "09:00",
+        "headway_min": 30,
+        "max_headway_min": 30,
+        "min_headway_min": 10,
+        "demand_weight": {
+          "outbound": 1.0,
+          "inbound": 0.25
+        }
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "driver_id": "BUS-248",
+      "name": "Bus 248 (Line 44) + its driver",
+      "shift_start": "06:53",
+      "shift_end": "08:13",
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "work_blocks": [
+        {
+          "start": "06:53",
+          "end": "07:24",
+          "line": "44",
+          "label": "Line 44 Hbf -> Langwasser Mitte",
+          "start_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "end_location": {
+            "name": "Langwasser Mitte (Nürnberg)"
+          },
+          "fahrtnummer": "2059839",
+          "replace_id": "2059839",
+          "replace_group": "Line 44 -> Langwasser Mitte"
+        },
+        {
+          "start": "07:35",
+          "end": "08:04",
+          "line": "44",
+          "label": "Line 44 Langwasser Mitte -> Hbf",
+          "start_location": {
+            "name": "Langwasser Mitte (Nürnberg)"
+          },
+          "end_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "fahrtnummer": "2059841",
+          "replace_id": "2059839",
+          "replace_group": "Line 44 -> Langwasser Mitte"
+        }
+      ],
+      "vehicle_number": "248",
+      "observation_window_only": true
+    },
+    {
+      "driver_id": "BUS-281",
+      "name": "Bus 281 (Line 44) + its driver",
+      "shift_start": "07:33",
+      "shift_end": "08:53",
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "work_blocks": [
+        {
+          "start": "07:33",
+          "end": "08:04",
+          "line": "44",
+          "label": "Line 44 Hbf -> Langwasser Mitte",
+          "start_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "end_location": {
+            "name": "Langwasser Mitte (Nürnberg)"
+          },
+          "fahrtnummer": "2067642",
+          "replace_id": "2067642",
+          "replace_group": "Line 44 -> Langwasser Mitte"
+        },
+        {
+          "start": "08:15",
+          "end": "08:44",
+          "line": "44",
+          "label": "Line 44 Langwasser Mitte -> Hbf",
+          "start_location": {
+            "name": "Langwasser Mitte (Nürnberg)"
+          },
+          "end_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "fahrtnummer": "2067644",
+          "replace_id": "2067642",
+          "replace_group": "Line 44 -> Langwasser Mitte"
+        }
+      ],
+      "vehicle_number": "281",
+      "observation_window_only": true
+    },
+    {
+      "driver_id": "BUS-3960",
+      "name": "Bus 3960 (Line 44) + its driver",
+      "shift_start": "06:43",
+      "shift_end": "08:43",
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "work_blocks": [
+        {
+          "start": "06:43",
+          "end": "07:03",
+          "line": "44",
+          "label": "Line 44 Hbf -> Zerzabelshof Ost",
+          "start_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "end_location": {
+            "name": "Zerzabelshof Ost (Nürnberg)"
+          },
+          "fahrtnummer": "2075807",
+          "replace_id": "2075807",
+          "replace_group": "Line 44 -> Zerzabelshof Ost"
+        },
+        {
+          "start": "07:16",
+          "end": "07:34",
+          "line": "44",
+          "label": "Line 44 Zerzabelshof Ost -> Hbf",
+          "start_location": {
+            "name": "Zerzabelshof Ost (Nürnberg)"
+          },
+          "end_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "fahrtnummer": "2075808",
+          "replace_id": "2075807",
+          "replace_group": "Line 44 -> Zerzabelshof Ost"
+        },
+        {
+          "start": "07:43",
+          "end": "08:03",
+          "line": "44",
+          "label": "Line 44 Hbf -> Zerzabelshof Ost",
+          "start_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "end_location": {
+            "name": "Zerzabelshof Ost (Nürnberg)"
+          },
+          "fahrtnummer": "2075809",
+          "replace_id": "2075809",
+          "replace_group": "Line 44 -> Zerzabelshof Ost"
+        },
+        {
+          "start": "08:16",
+          "end": "08:34",
+          "line": "44",
+          "label": "Line 44 Zerzabelshof Ost -> Hbf",
+          "start_location": {
+            "name": "Zerzabelshof Ost (Nürnberg)"
+          },
+          "end_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "fahrtnummer": "2075810",
+          "replace_id": "2075809",
+          "replace_group": "Line 44 -> Zerzabelshof Ost"
+        }
+      ],
+      "vehicle_number": "3960",
+      "observation_window_only": true
+    },
+    {
+      "driver_id": "BUS-3962",
+      "name": "Bus 3962 (Line 44) + its driver",
+      "shift_start": "07:23",
+      "shift_end": "08:23",
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "work_blocks": [
+        {
+          "start": "07:23",
+          "end": "07:43",
+          "line": "44",
+          "label": "Line 44 Hbf -> Zerzabelshof Ost",
+          "start_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "end_location": {
+            "name": "Zerzabelshof Ost (Nürnberg)"
+          },
+          "fahrtnummer": "2053010",
+          "replace_id": "2053010",
+          "replace_group": "Line 44 -> Zerzabelshof Ost"
+        },
+        {
+          "start": "07:56",
+          "end": "08:14",
+          "line": "44",
+          "label": "Line 44 Zerzabelshof Ost -> Hbf",
+          "start_location": {
+            "name": "Zerzabelshof Ost (Nürnberg)"
+          },
+          "end_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "fahrtnummer": "2053011",
+          "replace_id": "2053010",
+          "replace_group": "Line 44 -> Zerzabelshof Ost"
+        }
+      ],
+      "vehicle_number": "3962",
+      "observation_window_only": true
+    },
+    {
+      "driver_id": "BUS-3964",
+      "name": "Bus 3964 (Line 44) + its driver",
+      "shift_start": "07:03",
+      "shift_end": "08:03",
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "work_blocks": [
+        {
+          "start": "07:03",
+          "end": "07:23",
+          "line": "44",
+          "label": "Line 44 Hbf -> Zerzabelshof Ost",
+          "start_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "end_location": {
+            "name": "Zerzabelshof Ost (Nürnberg)"
+          },
+          "fahrtnummer": "2161909",
+          "replace_id": "2161909",
+          "replace_group": "Line 44 -> Zerzabelshof Ost"
+        },
+        {
+          "start": "07:36",
+          "end": "07:54",
+          "line": "44",
+          "label": "Line 44 Zerzabelshof Ost -> Hbf",
+          "start_location": {
+            "name": "Zerzabelshof Ost (Nürnberg)"
+          },
+          "end_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "fahrtnummer": "2161910",
+          "replace_id": "2161909",
+          "replace_group": "Line 44 -> Zerzabelshof Ost"
+        }
+      ],
+      "vehicle_number": "3964",
+      "observation_window_only": true
+    },
+    {
+      "driver_id": "BUS-620",
+      "name": "Bus 620 (Line 44) + its driver",
+      "shift_start": "07:13",
+      "shift_end": "08:33",
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "work_blocks": [
+        {
+          "start": "07:13",
+          "end": "07:44",
+          "line": "44",
+          "label": "Line 44 Hbf -> Langwasser Mitte",
+          "start_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "end_location": {
+            "name": "Langwasser Mitte (Nürnberg)"
+          },
+          "fahrtnummer": "2117788",
+          "replace_id": "2117788",
+          "replace_group": "Line 44 -> Langwasser Mitte"
+        },
+        {
+          "start": "07:55",
+          "end": "08:24",
+          "line": "44",
+          "label": "Line 44 Langwasser Mitte -> Hbf",
+          "start_location": {
+            "name": "Langwasser Mitte (Nürnberg)"
+          },
+          "end_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "fahrtnummer": "2117790",
+          "replace_id": "2117788",
+          "replace_group": "Line 44 -> Langwasser Mitte"
+        }
+      ],
+      "vehicle_number": "620",
+      "observation_window_only": true
+    },
+    {
+      "driver_id": "BUS-631",
+      "name": "Bus 631 (Line 44) + its driver",
+      "shift_start": "06:33",
+      "shift_end": "07:53",
+      "depot": {
+        "name": "Nürnberg Hbf",
+        "lat": 49.44725111,
+        "lon": 11.08189,
+        "stop_id": "510"
+      },
+      "work_blocks": [
+        {
+          "start": "06:33",
+          "end": "07:04",
+          "line": "44",
+          "label": "Line 44 Hbf -> Langwasser Mitte",
+          "start_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "end_location": {
+            "name": "Langwasser Mitte (Nürnberg)"
+          },
+          "fahrtnummer": "2182704",
+          "replace_id": "2182704",
+          "replace_group": "Line 44 -> Langwasser Mitte"
+        },
+        {
+          "start": "07:15",
+          "end": "07:44",
+          "line": "44",
+          "label": "Line 44 Langwasser Mitte -> Hbf",
+          "start_location": {
+            "name": "Langwasser Mitte (Nürnberg)"
+          },
+          "end_location": {
+            "name": "Nürnberg Hbf",
+            "lat": 49.44725111,
+            "lon": 11.08189,
+            "stop_id": "510"
+          },
+          "fahrtnummer": "2182706",
+          "replace_id": "2182704",
+          "replace_group": "Line 44 -> Langwasser Mitte"
+        }
+      ],
+      "vehicle_number": "631",
+      "observation_window_only": true
+    }
+  ],
+  "demand_hubs": [
+    {
+      "name": "Nürnberg Hbf",
+      "lat": 49.44725111,
+      "lon": 11.08189,
+      "stop_id": "510",
+      "id": "HBF",
+      "type": "regional_transit_gateway",
+      "demand_weight": 1.0
+    },
+    {
+      "name": "Nürnberg Nordostpark",
+      "lat": 49.48914307,
+      "lon": 11.12585039,
+      "stop_id": "de:09564:1372",
+      "id": "NORDOSTPARK",
+      "type": "employment_cluster",
+      "demand_weight": 1.0
+    },
+    {
+      "name": "Nürnberg Herrnhütte",
+      "lat": 49.47876082,
+      "lon": 11.11012987,
+      "id": "HERRNHUETTE",
+      "type": "feeder_transit_node",
+      "demand_weight": 0.75
+    },
+    {
+      "name": "Nürnberg Nordostbahnhof",
+      "lat": 49.47273122,
+      "lon": 11.1040393,
+      "id": "NORDOSTBAHNHOF",
+      "type": "feeder_transit_node",
+      "demand_weight": 0.7
+    }
+  ]
+}

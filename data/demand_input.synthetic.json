@@ -1,0 +1,1709 @@
+{
+  "meta": {
+    "scenario_name": "Synthetic depot - 40 drivers, lines 36 & 65",
+    "service_date": "2026-10-06",
+    "source": "backend.synthetic seed=42",
+    "timezone": "Europe/Berlin",
+    "contract_version": "1.0"
+  },
+  "rules": {
+    "max_new_drivers": 0
+  },
+  "express_route": {
+    "route_id": "X1",
+    "name": "Hero Express X1: Langwasser Mitte <-> Nordostpark",
+    "origin": {
+      "name": "Langwasser Mitte",
+      "lat": 49.4046,
+      "lon": 11.1319
+    },
+    "destination": {
+      "name": "Nordostpark",
+      "lat": 49.4866,
+      "lon": 11.1285
+    },
+    "travel_time_min": 25,
+    "bidirectional": true,
+    "timetable_mode": "fixed",
+    "service_windows": [
+      {
+        "label": "AM peak",
+        "start": "06:30",
+        "end": "09:00",
+        "headway_min": 15,
+        "demand_weight": {
+          "outbound": 3,
+          "inbound": 1
+        }
+      },
+      {
+        "label": "PM peak",
+        "start": "15:30",
+        "end": "18:30",
+        "headway_min": 15,
+        "demand_weight": {
+          "outbound": 1,
+          "inbound": 3
+        }
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "driver_id": "D01",
+      "name": "Early shift D01, line 65",
+      "duty_type": "early",
+      "shift_start": "05:40",
+      "shift_end": "14:10",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "05:40",
+          "end": "08:50",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        },
+        {
+          "start": "11:00",
+          "end": "14:10",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D02",
+      "name": "Early shift D02, line 65",
+      "duty_type": "early",
+      "shift_start": "04:55",
+      "shift_end": "13:20",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "04:55",
+          "end": "08:10",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        },
+        {
+          "start": "10:05",
+          "end": "13:20",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D03",
+      "name": "Late shift D03, line 36",
+      "duty_type": "late",
+      "shift_start": "13:05",
+      "shift_end": "19:55",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "13:05",
+          "end": "15:40",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        },
+        {
+          "start": "16:50",
+          "end": "19:55",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D04",
+      "name": "Reserve D04",
+      "duty_type": "reserve",
+      "shift_start": "13:35",
+      "shift_end": "21:35",
+      "idle_gaps": [
+        {
+          "start": "13:35",
+          "end": "21:35",
+          "location": {
+            "name": "Bus depot",
+            "lat": 49.43,
+            "lon": 11.045
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D05",
+      "name": "Split shift D05, line 36",
+      "duty_type": "split",
+      "shift_start": "05:55",
+      "shift_end": "17:50",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "05:55",
+          "end": "08:50",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        },
+        {
+          "start": "14:30",
+          "end": "17:50",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D06",
+      "name": "Split shift D06, line 36",
+      "duty_type": "split",
+      "shift_start": "06:15",
+      "shift_end": "17:35",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "06:15",
+          "end": "09:35",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        },
+        {
+          "start": "14:25",
+          "end": "17:35",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D07",
+      "name": "Middle shift D07, line 36",
+      "duty_type": "middle",
+      "shift_start": "09:40",
+      "shift_end": "17:10",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "09:40",
+          "end": "12:50",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        },
+        {
+          "start": "13:30",
+          "end": "17:10",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D08",
+      "name": "Late shift D08, line 36",
+      "duty_type": "late",
+      "shift_start": "14:45",
+      "shift_end": "21:45",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "14:45",
+          "end": "17:35",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        },
+        {
+          "start": "18:40",
+          "end": "21:45",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D09",
+      "name": "Early shift D09, line 65",
+      "duty_type": "early",
+      "shift_start": "05:45",
+      "shift_end": "13:25",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "05:45",
+          "end": "08:55",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        },
+        {
+          "start": "09:45",
+          "end": "13:25",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D10",
+      "name": "Peak shift D10, line 36",
+      "duty_type": "peak",
+      "shift_start": "06:20",
+      "shift_end": "17:25",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "06:20",
+          "end": "08:20",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        },
+        {
+          "start": "15:20",
+          "end": "17:25",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D11",
+      "name": "Split shift D11, line 36",
+      "duty_type": "split",
+      "shift_start": "05:45",
+      "shift_end": "18:35",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "05:45",
+          "end": "09:10",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        },
+        {
+          "start": "15:25",
+          "end": "18:35",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D12",
+      "name": "Middle shift D12, line 65",
+      "duty_type": "middle",
+      "shift_start": "10:00",
+      "shift_end": "16:35",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "10:00",
+          "end": "13:10",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        },
+        {
+          "start": "13:50",
+          "end": "16:35",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D13",
+      "name": "Split shift D13, line 36",
+      "duty_type": "split",
+      "shift_start": "06:10",
+      "shift_end": "16:40",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "06:10",
+          "end": "09:15",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        },
+        {
+          "start": "14:10",
+          "end": "16:40",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D14",
+      "name": "Late shift D14, line 36",
+      "duty_type": "late",
+      "shift_start": "14:40",
+      "shift_end": "21:50",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "14:40",
+          "end": "17:05",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        },
+        {
+          "start": "19:10",
+          "end": "21:50",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D15",
+      "name": "Late shift D15, line 65",
+      "duty_type": "late",
+      "shift_start": "14:20",
+      "shift_end": "20:45",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "14:20",
+          "end": "17:00",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        },
+        {
+          "start": "18:00",
+          "end": "20:45",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D16",
+      "name": "Peak shift D16, line 65",
+      "duty_type": "peak",
+      "shift_start": "06:10",
+      "shift_end": "16:50",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "06:10",
+          "end": "07:45",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        },
+        {
+          "start": "14:50",
+          "end": "16:50",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D17",
+      "name": "Peak shift D17, line 36",
+      "duty_type": "peak",
+      "shift_start": "06:05",
+      "shift_end": "17:10",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "06:05",
+          "end": "08:15",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        },
+        {
+          "start": "15:30",
+          "end": "17:10",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D18",
+      "name": "Middle shift D18, line 36",
+      "duty_type": "middle",
+      "shift_start": "09:15",
+      "shift_end": "16:00",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "09:15",
+          "end": "12:45",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        },
+        {
+          "start": "13:20",
+          "end": "16:00",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D19",
+      "name": "Late shift D19, line 36",
+      "duty_type": "late",
+      "shift_start": "14:25",
+      "shift_end": "23:20",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "14:25",
+          "end": "17:45",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        },
+        {
+          "start": "19:35",
+          "end": "23:20",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D20",
+      "name": "Split shift D20, line 65",
+      "duty_type": "split",
+      "shift_start": "06:30",
+      "shift_end": "17:05",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "06:30",
+          "end": "09:20",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        },
+        {
+          "start": "14:35",
+          "end": "17:05",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D21",
+      "name": "Split shift D21, line 36",
+      "duty_type": "split",
+      "shift_start": "05:35",
+      "shift_end": "17:50",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "05:35",
+          "end": "09:00",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        },
+        {
+          "start": "15:15",
+          "end": "17:50",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D22",
+      "name": "Middle shift D22, line 36",
+      "duty_type": "middle",
+      "shift_start": "08:50",
+      "shift_end": "16:15",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "08:50",
+          "end": "12:20",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        },
+        {
+          "start": "13:05",
+          "end": "16:15",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D23",
+      "name": "Reserve D23",
+      "duty_type": "reserve",
+      "shift_start": "05:45",
+      "shift_end": "13:45",
+      "idle_gaps": [
+        {
+          "start": "05:45",
+          "end": "13:45",
+          "location": {
+            "name": "Bus depot",
+            "lat": 49.43,
+            "lon": 11.045
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D24",
+      "name": "Middle shift D24, line 65",
+      "duty_type": "middle",
+      "shift_start": "09:30",
+      "shift_end": "16:45",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "09:30",
+          "end": "13:00",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        },
+        {
+          "start": "13:40",
+          "end": "16:45",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D25",
+      "name": "Late shift D25, line 65",
+      "duty_type": "late",
+      "shift_start": "13:15",
+      "shift_end": "19:00",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "13:15",
+          "end": "15:50",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        },
+        {
+          "start": "16:30",
+          "end": "19:00",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D26",
+      "name": "Late shift D26, line 36",
+      "duty_type": "late",
+      "shift_start": "14:30",
+      "shift_end": "20:35",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "14:30",
+          "end": "17:05",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        },
+        {
+          "start": "18:00",
+          "end": "20:35",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D27",
+      "name": "Reserve D27",
+      "duty_type": "reserve",
+      "shift_start": "05:55",
+      "shift_end": "13:55",
+      "idle_gaps": [
+        {
+          "start": "05:55",
+          "end": "13:55",
+          "location": {
+            "name": "Bus depot",
+            "lat": 49.43,
+            "lon": 11.045
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D28",
+      "name": "Peak shift D28, line 65",
+      "duty_type": "peak",
+      "shift_start": "06:20",
+      "shift_end": "16:50",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "06:20",
+          "end": "08:05",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        },
+        {
+          "start": "15:10",
+          "end": "16:50",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D29",
+      "name": "Early shift D29, line 65",
+      "duty_type": "early",
+      "shift_start": "05:20",
+      "shift_end": "13:10",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "05:20",
+          "end": "09:05",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        },
+        {
+          "start": "10:35",
+          "end": "13:10",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D30",
+      "name": "Early shift D30, line 65",
+      "duty_type": "early",
+      "shift_start": "05:40",
+      "shift_end": "13:40",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "05:40",
+          "end": "09:15",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        },
+        {
+          "start": "10:15",
+          "end": "13:40",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D31",
+      "name": "Reserve D31",
+      "duty_type": "reserve",
+      "shift_start": "13:30",
+      "shift_end": "21:30",
+      "idle_gaps": [
+        {
+          "start": "13:30",
+          "end": "21:30",
+          "location": {
+            "name": "Bus depot",
+            "lat": 49.43,
+            "lon": 11.045
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D32",
+      "name": "Middle shift D32, line 36",
+      "duty_type": "middle",
+      "shift_start": "09:05",
+      "shift_end": "15:45",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "09:05",
+          "end": "12:00",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        },
+        {
+          "start": "12:35",
+          "end": "15:45",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D33",
+      "name": "Early shift D33, line 65",
+      "duty_type": "early",
+      "shift_start": "05:10",
+      "shift_end": "13:00",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "05:10",
+          "end": "08:20",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        },
+        {
+          "start": "09:20",
+          "end": "13:00",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D34",
+      "name": "Early shift D34, line 36",
+      "duty_type": "early",
+      "shift_start": "04:50",
+      "shift_end": "11:35",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "04:50",
+          "end": "07:20",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        },
+        {
+          "start": "08:55",
+          "end": "11:35",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D35",
+      "name": "Early shift D35, line 65",
+      "duty_type": "early",
+      "shift_start": "05:15",
+      "shift_end": "13:10",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "05:15",
+          "end": "08:45",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        },
+        {
+          "start": "10:10",
+          "end": "13:10",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D36",
+      "name": "Late shift D36, line 65",
+      "duty_type": "late",
+      "shift_start": "13:40",
+      "shift_end": "21:30",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "13:40",
+          "end": "16:50",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        },
+        {
+          "start": "17:45",
+          "end": "21:30",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D37",
+      "name": "Late shift D37, line 65",
+      "duty_type": "late",
+      "shift_start": "13:30",
+      "shift_end": "19:00",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "13:30",
+          "end": "15:35",
+          "line": "65",
+          "start_location": {
+            "name": "Nordostbahnhof",
+            "lat": 49.47,
+            "lon": 11.103
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        },
+        {
+          "start": "16:25",
+          "end": "19:00",
+          "line": "65",
+          "start_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          },
+          "end_location": {
+            "name": "Roethenbach",
+            "lat": 49.4209,
+            "lon": 11.0316
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D38",
+      "name": "Late shift D38, line 36",
+      "duty_type": "late",
+      "shift_start": "13:05",
+      "shift_end": "21:10",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "13:05",
+          "end": "16:20",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        },
+        {
+          "start": "17:20",
+          "end": "21:10",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D39",
+      "name": "Early shift D39, line 36",
+      "duty_type": "early",
+      "shift_start": "05:10",
+      "shift_end": "12:20",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "05:10",
+          "end": "07:50",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        },
+        {
+          "start": "08:45",
+          "end": "12:20",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          }
+        }
+      ]
+    },
+    {
+      "driver_id": "D40",
+      "name": "Early shift D40, line 36",
+      "duty_type": "early",
+      "shift_start": "05:20",
+      "shift_end": "12:00",
+      "depot": {
+        "name": "Bus depot",
+        "lat": 49.43,
+        "lon": 11.045
+      },
+      "work_blocks": [
+        {
+          "start": "05:20",
+          "end": "07:55",
+          "line": "36",
+          "start_location": {
+            "name": "Doku-Zentrum",
+            "lat": 49.4313,
+            "lon": 11.112
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        },
+        {
+          "start": "08:40",
+          "end": "12:00",
+          "line": "36",
+          "start_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          },
+          "end_location": {
+            "name": "Plaerrer",
+            "lat": 49.4482,
+            "lon": 11.0675
+          }
+        }
+      ]
+    }
+  ]
+}

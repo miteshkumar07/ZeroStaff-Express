@@ -1,20 +1,20 @@
-"""VAG Express Network Optimizer - dashboard on top of the OR-Tools backend.
+"""ZeroStaff Express - results-first dashboard on top of the OR-Tools backend.
 
     .venv/bin/streamlit run app.py
 
-Default scenarios load instantly from the precomputed data/optimized_schedule*.json files;
-"Rerun MILP Optimization" re-solves live with the sidebar settings (backend.run.optimize).
+Default scenarios load instantly from data/optimized_schedule*.json; "Run optimizer" re-solves live.
 The original static mockup is kept in app_mockup.py.
 """
 
+import hashlib
 import json
 from pathlib import Path
 
 import folium
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 import streamlit as st
+from folium.plugins import AntPath
 from streamlit_folium import st_folium
 
 from backend.adapters import puls_to_contract
@@ -22,39 +22,53 @@ from backend.run import optimize
 
 ROOT = Path(__file__).resolve().parent
 SCENARIOS = {
-    "Real data · X30 Hbf → Nordostpark (VAG PULS)": (ROOT / "demand_input.json", ROOT / "data/optimized_schedule.real.json"),
-    "Synthetic depot · 40 drivers (idle time)": (ROOT / "data/demand_input.synthetic.json",
-                                                ROOT / "data/optimized_schedule.synthetic.json"),
-    "Dummy · 5 drivers (idle time)": (ROOT / "data/demand_input.dummy.json", ROOT / "data/optimized_schedule.json"),
+    "🚍 Real VAG data · X30 Hbf → Nordostpark": (ROOT / "demand_input.json", ROOT / "data/optimized_schedule.real.json"),
+    "🧪 Synthetic depot · 40 drivers": (ROOT / "data/demand_input.synthetic.json",
+                                       ROOT / "data/optimized_schedule.synthetic.json"),
+    "🧪 Dummy · 5 drivers": (ROOT / "data/demand_input.dummy.json", ROOT / "data/optimized_schedule.json"),
 }
-# categorical segment colours - validated (dark surface): lightness band, chroma, CVD & normal-vision separation
-SEG = {
-    "regular_service": ("Regular service", "#3987e5"),
-    "express": ("Express (new)", "#e3000f"),
-    "deadhead": ("Changeover / transfer", "#c98500"),
-    "break": ("Break", "#199e70"),
-    "idle": ("Idle / waiting", "#5f5e5a"),
-    "layover": ("Layover < 15 min", "#3d3c39"),
-}
-SEG_NAME = {k: v[0] for k, v in SEG.items()}
-SEG_COLOR = {v[0]: v[1] for v in SEG.values()}
-SURFACE = "#0e1117"   # Streamlit dark background: 2px gaps between adjacent bars
+SHAPES_FILE = ROOT / "data/route_shapes.json"
+RED, BLUE, AMBER, AQUA, GREY = "#e3000f", "#3987e5", "#c98500", "#199e70", "#5f5e5a"
+SEG = {"regular_service": ("Regular service", BLUE), "express": ("Express (new)", RED),
+       "deadhead": ("Changeover / transfer", AMBER), "break": ("Break", AQUA),
+       "idle": ("Waiting / idle", GREY), "layover": ("Short layover", "#3d3c39")}
+SURFACE = "#0e1117"
 
-st.set_page_config(page_title="VAG Express AI", layout="wide", page_icon="🚍")
+st.set_page_config(page_title="ZeroStaff Express", layout="wide", page_icon="🚍")
 st.markdown("""
-    <style>
-    .main-header { font-size: 32px !important; font-weight: 900; color: #E3000F; }
-    .sub-header { font-size: 20px !important; color: #8fb4ff; font-weight: bold; margin-bottom: 6px; }
-    .driver-status { background-color: #10B981; color: white; padding: 10px; border-radius: 8px;
-                     font-weight: bold; text-align: center; }
-    .driver-status.idle { background-color: #3d3c39; }
-    </style>
+<style>
+.block-container {padding-top: 1.6rem; max-width: 1400px;}
+.hero {background: radial-gradient(1200px 300px at 10% -20%, rgba(227,0,15,.55), transparent 60%),
+        linear-gradient(135deg, #1a0a0c 0%, #0e1117 60%); border: 1px solid #3a1418;
+        border-radius: 22px; padding: 30px 34px; margin-bottom: 18px;}
+.hero h1 {font-size: 46px; font-weight: 900; margin: 0; letter-spacing: -1px;}
+.hero h1 span {color: #ff2a36;}
+.hero .sub {font-size: 21px; color: #e9e7df; margin-top: 8px;}
+.hero .sub b {color: #fff;}
+.badge {display: inline-block; margin-top: 14px; padding: 6px 14px; border-radius: 999px; font-size: 14px;
+        background: rgba(25,158,112,.18); border: 1px solid #199e70; color: #5ee6b0; font-weight: 600;}
+.badge.bad {background: rgba(227,0,15,.15); border-color: #e3000f; color: #ff7b82;}
+.kpis {display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 8px;}
+.kpi {background: #16171c; border: 1px solid #2a2b31; border-radius: 18px; padding: 18px 20px;}
+.kpi .l {color: #9a99a3; font-size: 14px; font-weight: 600;}
+.kpi .v {font-size: 44px; font-weight: 900; line-height: 1.1; margin-top: 4px;}
+.kpi .d {color: #c3c2b7; font-size: 14px; margin-top: 4px;}
+.kpi.red .v {color: #ff2a36;} .kpi.green .v {color: #5ee6b0;}
+.section {font-size: 26px; font-weight: 800; margin: 26px 0 4px;}
+.hint {color: #9a99a3; font-size: 15px; margin-bottom: 10px;}
+.maptitle {font-size: 18px; font-weight: 800; margin: 2px 0 6px;}
+.maptitle.before {color: #8fb4ff;} .maptitle.after {color: #ff5a63;}
+.chips {display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 4px;}
+.chip {background: linear-gradient(135deg, #e3000f, #9c0009); color: #fff; font-weight: 800; font-size: 22px;
+       padding: 10px 18px; border-radius: 14px; box-shadow: 0 6px 18px rgba(227,0,15,.25);}
+.chip small {display: block; font-size: 12px; font-weight: 600; opacity: .85;}
+.chip.back {background: #22232a; box-shadow: none; border: 1px solid #3a3b42; font-size: 18px;}
+@media (max-width: 900px) {.kpis {grid-template-columns: 1fr 1fr;}}
+</style>
 """, unsafe_allow_html=True)
 
 
-# ==========================================
-# DATA
-# ==========================================
+# ============================================================ data
 def is_realloc(raw: dict) -> bool:
     return "candidate_vehicle_windows" in raw and "drivers" not in raw
 
@@ -79,367 +93,248 @@ def run_optimizer(path: str, mtime: float, params_json: str, full: bool) -> dict
                     time_limit_s=15, sweep_time_limit_s=5)
 
 
-def precomputed(inp: Path, outp: Path) -> dict | None:
+def precomputed(inp: Path, outp: Path):
     if outp.exists() and inp.exists() and outp.stat().st_mtime >= inp.stat().st_mtime:
         return load_json(str(outp), outp.stat().st_mtime)
     return None
 
 
-# ==========================================
-# SIDEBAR CONTROLS (all of them drive the solver)
-# ==========================================
+shapes = load_json(str(SHAPES_FILE), SHAPES_FILE.stat().st_mtime) if SHAPES_FILE.exists() else {}
+
+# ============================================================ sidebar
 with st.sidebar:
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/VAG_Logo.svg/330px-VAG_Logo.svg.png", width=150)
-    st.markdown("### AI Dispatch Controls")
-    scenario = st.selectbox("Scenario / data source", list(SCENARIOS))
+    st.markdown("## 🚍 ZeroStaff Express")
+    scenario = st.selectbox("Data", list(SCENARIOS))
     inp, outp = SCENARIOS[scenario]
-    if not inp.exists():
-        st.error(f"Input file missing: {inp.name}")
-        st.stop()
     raw = load_json(str(inp), inp.stat().st_mtime)
     realloc = is_realloc(raw)
-
     with st.form("controls"):
+        st.markdown("**Optimizer settings**")
         if realloc:
             n_opts = len(raw.get("candidate_vehicle_windows") or [])
             defaults = {"x30_headway": 30, "max_realloc": n_opts, "max_in_row": 1}
-            x30_headway = st.select_slider("X30 target headway (min)", [20, 30, 40], value=30, key=f"hw_{scenario}",
-                                           help="The solver tries to run an X30 at least this often.")
-            max_realloc = st.slider("Max Line 44 round trips to reallocate", 0, n_opts, n_opts, key=f"mr_{scenario}",
-                                    help="Disruption budget: how many existing round trips may be handed to X30.")
-            max_in_row = st.slider("Max cancellations in a row per branch", 1, 3, 1, key=f"row_{scenario}",
-                                   help="1 = a branch never loses two departures in a row (headway at most doubles).")
-            params = {"x30_headway": x30_headway, "max_realloc": max_realloc, "max_in_row": max_in_row}
+            params = {
+                "x30_headway": st.select_slider("X30 every … min (target)", [20, 30, 40], 30, key=f"hw_{scenario}"),
+                "max_realloc": st.slider("Line 44 trips we may hand over", 0, n_opts, n_opts, key=f"mr_{scenario}"),
+                "max_in_row": st.slider("Max missing Line 44 buses in a row", 1, 3, 1, key=f"row_{scenario}"),
+            }
         else:
             defaults = {"headway": None, "max_new": 0}
-            hw = st.selectbox("Express headway", ["As planned in input", 10, 15, 20, 30], key=f"hw_{scenario}")
-            max_new = st.slider("New drivers allowed", 0, 3, 0, help="0 = Zero-New-Staff lock", key=f"new_{scenario}")
-            params = {"headway": None if isinstance(hw, str) else int(hw), "max_new": max_new}
-        submitted = st.form_submit_button("🔄 Rerun MILP Optimization", type="primary", width="stretch")
+            hw = st.selectbox("Express every … min", ["as planned", 10, 15, 20, 30], key=f"hw_{scenario}")
+            params = {"headway": None if isinstance(hw, str) else int(hw),
+                      "max_new": st.slider("New drivers allowed", 0, 3, 0, key=f"new_{scenario}")}
+        submitted = st.form_submit_button("🚀 Run optimizer", type="primary", width="stretch")
+    st.caption("Google OR-Tools CP-SAT · every plan re-checked by an independent validator")
 
-if "results" not in st.session_state:
-    st.session_state.results, st.session_state.defaults = {}, {}
+if "defaults" not in st.session_state:
+    st.session_state.defaults, st.session_state.results = {}, {}
 if scenario not in st.session_state.defaults:
     with st.spinner("Loading optimized schedule…"):
         st.session_state.defaults[scenario] = precomputed(inp, outp) or run_optimizer(
             str(inp), inp.stat().st_mtime, json.dumps(defaults, sort_keys=True), True)
 if submitted:
-    with st.spinner("Solving with Google OR-Tools CP-SAT…"):
-        res = (st.session_state.defaults[scenario] if params == defaults else
-               run_optimizer(str(inp), inp.stat().st_mtime, json.dumps(params, sort_keys=True), False))
-    st.session_state.results[scenario] = (params, res)
-used_params, out = st.session_state.results.get(scenario, (defaults, st.session_state.defaults[scenario]))
+    with st.spinner("🧠 Optimizing with OR-Tools CP-SAT…"):
+        res = st.session_state.defaults[scenario] if params == defaults else run_optimizer(
+            str(inp), inp.stat().st_mtime, json.dumps(params, sort_keys=True), False)
+    st.session_state.results[scenario] = res
+    st.toast(f"Optimized: {res['meta']['status']} in {res['meta']['solve_time_s']} s", icon="✅")
+out = st.session_state.results.get(scenario, st.session_state.defaults[scenario])
 default_out = st.session_state.defaults[scenario]
 k, meta = out["kpis"], out["meta"]
-
-drivers = out["drivers"]
-order = sorted(drivers, key=lambda d: (not d["changed"], d["driver_id"]))
-with st.sidebar:
-    st.markdown("---")
-    st.markdown("### Driver Selector")
-    labels = {d["driver_id"]: f"{'✳ ' if d['changed'] else ''}{d['name']}" for d in drivers}
-    pick = st.selectbox("View Shift For:", [d["driver_id"] for d in order], key=f"driver_{scenario}",
-                        format_func=lambda i: labels.get(i, i))
-    if used_params != params:
-        st.caption("Settings changed - press **Rerun** to re-optimize.")
-
-# ==========================================
-# HEADER + KPIs
-# ==========================================
-st.markdown("<div class='main-header'>VAG Express Network Optimizer</div>", unsafe_allow_html=True)
-st.markdown(f"**{meta.get('scenario_name') or scenario}** · {meta['solver']} · status **{meta['status']}** "
-            f"in {meta['solve_time_s']} s")
+routes, drivers = out["express_routes"], out["drivers"]
+run_id = hashlib.md5(json.dumps([k.get("express_trips_covered"), k.get("existing_trips_reallocated"),
+                                 [t["trip_id"] for r in routes for t in r["trips"] if t["covered"]]]).encode()).hexdigest()[:8]
 comp = out.get("compliance") or {}
-n_pass = sum(c["passed"] for c in comp.get("checks", []))
-n_all = len(comp.get("checks", []))
-if comp.get("passed"):
-    st.success(f"✅ Independently verified schedule: {n_pass}/{n_all} checks passed "
-               "(zero new staff, break rules, regular service, timetable, locations)")
-else:
-    st.error(f"❌ Validator: {n_pass}/{n_all} checks passed - see Optimizer Insights")
+n_pass, n_all = sum(c["passed"] for c in comp.get("checks", [])), len(comp.get("checks", []))
+covered = [t for r in routes for t in r["trips"] if t["covered"]]
+outbound = sorted((t for t in covered if t["direction"] == "outbound"), key=lambda t: t["departure_min"])
+inbound = sorted((t for t in covered if t["direction"] == "inbound"), key=lambda t: t["departure_min"])
+r0 = routes[0]
+ded = k.get("dedicated_drivers_needed") or 0
 
-c1, c2, c3, c4 = st.columns(4)
-ded = k.get("dedicated_drivers_needed")
+# ============================================================ hero + KPIs
 if realloc:
-    out_deps = sum(1 for r in out["express_routes"] for t in r["trips"] if t["direction"] == "outbound")
-    in_deps = sum(1 for r in out["express_routes"] for t in r["trips"] if t["direction"] == "inbound")
-    bh = k.get("branch_headways") or []
-    worst_before = max((b["max_headway_before_min"] for b in bh), default=0)
-    worst_after = max((b["max_headway_after_min"] for b in bh), default=0)
-    c1.metric("New drivers · new buses", f"{k['new_drivers_required']} · 0", "Zero-New-Staff lock held", border=True)
-    c2.metric("X30 departures 06:30–09:00", f"{out_deps} out · {in_deps} back",
-              f"longest wait {k['max_passenger_wait_min']} min", delta_color="off", border=True)
-    c3.metric("Line 44 round trips reallocated", f"{k['existing_trips_reallocated']} of {n_opts}",
-              f"branch headway {worst_before} → {worst_after} min", delta_color="inverse", border=True)
-    c4.metric("Traditional way: new drivers + buses", f"{ded} + {ded}" if ded is not None else "–",
-              f"~€{k.get('annual_cost_avoided_eur', 0):,}/yr avoided", border=True)
+    headline = (f"The new <b>{r0['route_id']}</b> runs <b>{len(outbound)}×</b> this morning with "
+                f"<b>0 new drivers</b> and <b>0 new buses</b>")
 else:
-    c1.metric("New drivers required", k["new_drivers_required"],
-              "Zero-New-Staff lock" if k["new_drivers_allowed"] == 0 else f"what-if: ≤ {k['new_drivers_allowed']}",
-              border=True)
-    c2.metric("Express trips covered", f"{k['express_trips_covered']} / {k['express_trips_target']}",
-              f"{k['coverage_pct']}% of timetable", delta_color="off", border=True)
-    c3.metric("Idle time turned into service", f"{k['idle_minutes_reclaimed'] / 60:.1f} h",
-              f"utilisation {k['utilisation_before_pct']}% → {k['utilisation_after_pct']}%", border=True)
-    c4.metric("Traditional approach would need", f"{ded} new drivers" if ded is not None else "–",
-              f"~€{k.get('annual_cost_avoided_eur', 0):,}/yr avoided", border=True)
+    headline = (f"<b>{k['express_trips_covered']}</b> express trips run with <b>{k['new_drivers_required']} new drivers</b>, "
+                f"using idle time of today's staff")
+badge = (f"<span class='badge'>✅ Verified · {n_pass}/{n_all} safety checks passed · {meta['status']} in "
+         f"{meta['solve_time_s']} s</span>" if comp.get("passed") else
+         f"<span class='badge bad'>❌ {n_pass}/{n_all} checks passed</span>")
+st.markdown(f"<div class='hero'><h1>ZeroStaff <span>Express</span></h1>"
+            f"<div class='sub'>{headline}.</div>{badge}</div>", unsafe_allow_html=True)
 
-st.markdown("<br>", unsafe_allow_html=True)
+if realloc:
+    bh = k.get("branch_headways") or []
+    wb = max((b["max_headway_before_min"] for b in bh), default=0)
+    wa = max((b["max_headway_after_min"] for b in bh), default=0)
+    cards = [("green", "New drivers · new buses", "0 · 0", "Zero-New-Staff lock"),
+             ("red", f"New {r0['route_id']} trips", f"{len(outbound)} + {len(inbound)}",
+              f"out + back · longest wait {k['max_passenger_wait_min']} min"),
+             ("", "Line 44 trips handed over", f"{k['existing_trips_reallocated']} / {n_opts}",
+              f"bus every {wb} → max {wa} min on a branch"),
+             ("", "Hiring the usual way", f"{ded} + {ded}", f"drivers + buses · ≈ €{k.get('annual_cost_avoided_eur', 0):,}/yr saved")]
+else:
+    cards = [("green", "New drivers", str(k["new_drivers_required"]),
+              "Zero-New-Staff lock" if not k["new_drivers_allowed"] else f"what-if ≤ {k['new_drivers_allowed']}"),
+             ("red", "Express trips running", f"{k['express_trips_covered']}/{k['express_trips_target']}",
+              f"{k['coverage_pct']}% of the timetable"),
+             ("", "Idle time put to work", f"{k['idle_minutes_reclaimed'] / 60:.1f} h",
+              f"utilisation {k['utilisation_before_pct']}% → {k['utilisation_after_pct']}%"),
+             ("", "Hiring the usual way", f"{ded} drivers", f"≈ €{k.get('annual_cost_avoided_eur', 0):,}/yr saved")]
+st.markdown("<div class='kpis'>" + "".join(
+    f"<div class='kpi {c}'><div class='l'>{l}</div><div class='v'>{v}</div><div class='d'>{d}</div></div>"
+    for c, l, v, d in cards) + "</div>", unsafe_allow_html=True)
 
 
-# ==========================================
-# CHART HELPERS
-# ==========================================
-def seg_frame(segments: list, row: str) -> pd.DataFrame:
-    return pd.DataFrame([{
-        "Row": row, "Type": SEG_NAME.get(s["type"], s["type"]), "What": s["label"],
-        "Start": pd.to_datetime(s["start_iso"]), "End": pd.to_datetime(s["end_iso"]),
-        "Time": f"{s['start']}–{s['end']}", "Minutes": s["duration_min"]} for s in segments])
+# ============================================================ maps: before vs after
+def label(loc, text, color):
+    return folium.Marker(loc, icon=folium.DivIcon(icon_size=(0, 0), html=(
+        f"<div style='transform:translate(-50%,-140%);white-space:nowrap;background:{color};color:#fff;"
+        f"font:700 12px sans-serif;padding:4px 8px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.5)'>{text}</div>")))
 
 
-def gantt(df: pd.DataFrame, rows: list, height: int) -> go.Figure:
-    fig = px.timeline(df, x_start="Start", x_end="End", y="Row", color="Type", color_discrete_map=SEG_COLOR,
-                      hover_name="What", hover_data={"Time": True, "Minutes": True, "Start": False, "End": False,
-                                                     "Row": False, "Type": True},
-                      category_orders={"Row": rows, "Type": [v[0] for v in SEG.values()]}, height=height)
+def stop(fmap, loc, name, color):
+    folium.CircleMarker(loc, radius=8, color="#fff", weight=2, fill=True, fill_color=color, fill_opacity=1,
+                        tooltip=name).add_to(fmap)
+
+
+def build_map(after: bool) -> folium.Map:
+    o, dst = r0["origin"], r0["destination"]
+    express = shapes.get(r0["route_id"], {}).get("coords") or [[o["lat"], o["lon"]], [dst["lat"], dst["lon"]]]
+    lats = [p[0] for p in express]
+    lons = [p[1] for p in express]
+    branches = {g: v for g, v in shapes.items() if g.startswith("Line ")} if realloc else {}
+    for v in branches.values():
+        lats += [p[0] for p in v["coords"]]
+        lons += [p[1] for p in v["coords"]]
+    center = [(min(lats) + max(lats)) / 2, (min(lons) + max(lons)) / 2 + 0.012]
+    fmap = folium.Map(location=center, zoom_start=12, zoom_control=True,
+                      tiles="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+                      attr="Esri, OpenStreetMap contributors")
+    folium.TileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
+                     attr="Esri", overlay=True, control=False).add_to(fmap)
+    by_group = {b["group"]: b for b in (k.get("branch_headways") or [])}
+    for g, v in branches.items():
+        b = by_group.get(g, {})
+        total, gone = b.get("departures", 0), b.get("reallocated", 0) if after else 0
+        name = g.replace("Line 44 -> ", "")
+        folium.PolyLine(v["coords"], color=BLUE, weight=7 if not gone else 4, opacity=0.95 if not gone else 0.55,
+                        tooltip=f"{g}: {total - gone} of {total} trips run").add_to(fmap)
+        txt = f"44 → {name} · {total} trips" if not after else f"44 → {name} · {total - gone}/{total} trips"
+        label(v["coords"][-1], txt, "#1f4f8f").add_to(fmap)
+        stop(fmap, v["coords"][-1], name, BLUE)
+    if after and covered:
+        AntPath(express, color=RED, pulse_color="#ffd0d3", weight=8, delay=600, dash_array=[18, 26],
+                tooltip=f"{r0['route_id']} express · {len(covered)} trips").add_to(fmap)
+        txt = f"{r0['route_id']} NEW · {len(outbound)} departures"
+        label(express[len(express) // 2], txt, RED).add_to(fmap)
+    elif not after:
+        folium.PolyLine(express, color="#8a897f", weight=3, dash_array="4 10", opacity=0.8,
+                        tooltip=f"{r0['route_id']} corridor: no direct bus today").add_to(fmap)
+        label(express[len(express) // 2], "no direct bus today", "#3d3c39").add_to(fmap)
+    stop(fmap, express[0], o["name"], RED if after else "#8a897f")
+    stop(fmap, express[-1], dst["name"], RED if after else "#8a897f")
+    label(express[0], o["name"].replace("Nürnberg ", ""), "#26272e").add_to(fmap)
+    label(express[-1], dst["name"].replace("Nürnberg ", ""), "#26272e").add_to(fmap)
+    return fmap
+
+
+st.markdown("<div class='section'>🗺️ Before vs after</div>", unsafe_allow_html=True)
+st.markdown("<div class='hint'>Left: today's network. Right: the optimizer's plan. Run the optimizer with "
+            "different settings in the sidebar and the right map updates.</div>", unsafe_allow_html=True)
+m1, m2 = st.columns(2)
+with m1:
+    st.markdown("<div class='maptitle before'>BEFORE · today</div>", unsafe_allow_html=True)
+    st_folium(build_map(False), height=480, use_container_width=True, returned_objects=[], key=f"mb_{scenario}")
+with m2:
+    st.markdown("<div class='maptitle after'>AFTER · optimized</div>", unsafe_allow_html=True)
+    st_folium(build_map(True), height=480, use_container_width=True, returned_objects=[], key=f"ma_{run_id}")
+
+# ============================================================ new timetable
+st.markdown(f"<div class='section'>🕒 New {r0['route_id']} timetable</div>", unsafe_allow_html=True)
+if outbound:
+    st.markdown(f"<div class='hint'>{r0['origin']['name']} → {r0['destination']['name']} · "
+                f"{r0['travel_time_min']} min</div>", unsafe_allow_html=True)
+    st.markdown("<div class='chips'>" + "".join(
+        f"<div class='chip'>{t['departure']}<small>{t['driver_id'].replace('BUS-', 'bus ')}</small></div>"
+        for t in outbound[:14]) + "</div>", unsafe_allow_html=True)
+    if inbound:
+        st.markdown(f"<div class='hint' style='margin-top:10px'>Back: {r0['destination']['name']} → "
+                    f"{r0['origin']['name']}</div>", unsafe_allow_html=True)
+        st.markdown("<div class='chips'>" + "".join(f"<div class='chip back'>{t['departure']}</div>"
+                                                   for t in inbound[:14]) + "</div>", unsafe_allow_html=True)
+else:
+    st.info("No express trips with these settings. Allow more trips to be handed over and run again.")
+
+if realloc and out.get("reallocations"):
+    st.markdown("<div class='hint' style='margin-top:14px'>Paid for by handing over these Line 44 round trips "
+                "(same bus, same driver, back at Hbf for the next run):</div>", unsafe_allow_html=True)
+    st.dataframe(pd.DataFrame([{
+        "Bus": r["driver_id"].replace("BUS-", ""), "Branch": r["group"].replace("Line 44 -> ", "44 → "),
+        "Line 44 trip handed over": " + ".join(f"{c['start']}–{c['end']}" for c in r["cancelled"]),
+        "Now runs X30": ", ".join(t.split("-")[-1][:2] + ":" + t.split("-")[-1][2:] for t in r["express_trips"]),
+        "Driver rest": f"{r['rest_before_min']} → {r['rest_after_min']} min"} for r in out["reallocations"]]),
+        hide_index=True, width="stretch")
+
+# ============================================================ details
+st.markdown("<div class='section'>🔍 Look closer</div>", unsafe_allow_html=True)
+t1, t2, t3 = st.tabs(["👤 A driver's day", "📈 Trade-off", "🛡️ Safety checks"])
+
+with t1:
+    order = sorted(drivers, key=lambda d: (not d["changed"], d["driver_id"]))
+    names = {d["driver_id"]: f"{'⭐ ' if d['changed'] else ''}{d['name']}" for d in order}
+    pick = st.selectbox("Driver / bus", list(names), format_func=lambda i: names.get(i, i), key=f"drv_{scenario}")
+    d = next((x for x in drivers if x["driver_id"] == pick), order[0])
+    rows = []
+    for phase, segs in (("Before", d["before"]), ("After", d["after"])):
+        for s in segs:
+            nm, _ = SEG.get(s["type"], (s["type"], GREY))
+            rows.append({"Row": phase, "Type": nm, "What": s["label"], "Start": pd.to_datetime(s["start_iso"]),
+                         "End": pd.to_datetime(s["end_iso"]), "Time": f"{s['start']}–{s['end']}"})
+    fig = px.timeline(pd.DataFrame(rows), x_start="Start", x_end="End", y="Row", color="Type",
+                      color_discrete_map={v[0]: v[1] for v in SEG.values()}, hover_name="What",
+                      hover_data={"Time": True, "Start": False, "End": False, "Row": False},
+                      category_orders={"Row": ["Before", "After"]}, height=230)
     fig.update_traces(marker_line_color=SURFACE, marker_line_width=2)
     fig.update_yaxes(autorange="reversed", title=None)
     fig.update_xaxes(tickformat="%H:%M", title=None, gridcolor="#2a2a28")
-    fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), legend=dict(orientation="h", y=-0.25, title=None))
-    print(f"DEBUG: gantt() → {len(df)} segments, {len(rows)} rows, height={height}")
-    return fig
+    fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), legend=dict(orientation="h", y=-0.3, title=None))
+    st.plotly_chart(fig, width="stretch")
+    st.markdown("\n".join(f"- `{line[:11]}` {line[11:].strip()}" for line in d["itinerary"]))
 
-
-# ==========================================
-# TABS
-# ==========================================
-tab1, tab2, tab3 = st.tabs(["🗺️ System Dispatch (Network Map)", "📱 Driver Companion App (Shift)",
-                            "📊 Optimizer Insights"])
-
-# ------------------------------------------
-# TAB 1: NETWORK DISPATCH
-# ------------------------------------------
-with tab1:
-    map_col, stat_col = st.columns([2.3, 1])
-    routes = out["express_routes"]
-    with map_col:
-        r0 = routes[0]
-        st.markdown(f"<div class='sub-header'>{r0['name']} · {r0['travel_time_min']} min one way</div>",
-                    unsafe_allow_html=True)
-        o, dst = r0["origin"], r0["destination"]
-        center = [(o["lat"] + dst["lat"]) / 2, (o["lon"] + dst["lon"]) / 2] if o.get("lat") and dst.get("lat") \
-            else [49.45, 11.08]
-        fmap = folium.Map(location=center, zoom_start=13, tiles="OpenStreetMap")
-        for hub in (out.get("map") or {}).get("demand_hubs", []):
-            if hub.get("lat") is None:
-                continue
-            w = hub.get("demand_weight") or (hub.get("employees") or 0) / 5000 or 0.6
-            folium.CircleMarker([hub["lat"], hub["lon"]], radius=6 + 8 * min(float(w), 1.5), color="#3987e5",
-                                weight=2, fill=True, fill_opacity=0.35,
-                                tooltip=f"{hub['name']} · {hub.get('type') or 'demand hub'} · weight {w}").add_to(fmap)
-        for z in (out.get("map") or {}).get("residential_zones", []):
-            folium.CircleMarker([z["lat"], z["lon"]], radius=8, color="#199e70", fill=True, fill_opacity=0.35,
-                                tooltip=f"{z['name']} · residential").add_to(fmap)
-        for r in routes:
-            pts = [r["origin"]] + (r.get("stops") or []) + [r["destination"]]
-            pts = [[p["lat"], p["lon"]] for p in pts if p.get("lat") is not None]
-            if len(pts) >= 2:
-                folium.PolyLine(pts, color="#E3000F", weight=6, opacity=0.9, dash_array="10",
-                                tooltip=f"{r['route_id']} express (schematic straight line)").add_to(fmap)
-            for p, role in ((r["origin"], "origin"), (r["destination"], "destination")):
-                if p.get("lat") is not None:
-                    folium.CircleMarker([p["lat"], p["lon"]], radius=9, color="white", weight=2, fill=True,
-                                        fill_color="#E3000F", fill_opacity=1,
-                                        tooltip=f"{r['route_id']} {role}: {p['name']}").add_to(fmap)
-        st_folium(fmap, height=460, use_container_width=True, returned_objects=[])
-
-    with stat_col:
-        if realloc:
-            st.markdown("<div class='sub-header'>Departures at Hbf: before → after</div>", unsafe_allow_html=True)
-            st.caption("Each X30 round trip replaces one Line 44 round trip; the bus is back at Hbf for its next run.")
-            rows = []
-            replaced = {(r["driver_id"], r["option_id"]) for r in out.get("reallocations", [])}
-            for d in drivers:
-                for s in d["before"]:
-                    if s["type"] == "regular_service" and (s.get("from") or {}).get("name", "").endswith("Hbf"):
-                        oid = (s.get("meta") or {}).get("fahrtnummer")
-                        branch = s["label"].replace(" Hbf -> ", " → ")
-                        gone = (d["driver_id"], oid) in replaced
-                        rows.append({"Row": f"{branch} · before", "Time": pd.to_datetime(s["start_iso"]),
-                                     "Status": "Line 44 runs", "Bus": d["driver_id"]})
-                        rows.append({"Row": f"{branch} · after", "Time": pd.to_datetime(s["start_iso"]),
-                                     "Status": "Reallocated to X30" if gone else "Line 44 runs", "Bus": d["driver_id"]})
-            for r in routes:
-                for t in r["trips"]:
-                    if t["direction"] == "outbound":
-                        rows.append({"Row": f"{r['route_id']} → {r['destination']['name'].replace('Nürnberg ', '')} (new)",
-                                     "Time": pd.to_datetime(t["departure_iso"]), "Status": "X30 departs",
-                                     "Bus": t["driver_id"]})
-            df = pd.DataFrame(rows)
-            if not df.empty:
-                fig = px.scatter(df, x="Time", y="Row", color="Status", symbol="Status", hover_data={"Bus": True},
-                                 color_discrete_map={"Line 44 runs": "#3987e5", "Reallocated to X30": "#5f5e5a",
-                                                     "X30 departs": "#e3000f"},
-                                 symbol_map={"Line 44 runs": "circle", "Reallocated to X30": "x-open",
-                                             "X30 departs": "star"}, height=330)
-                fig.update_traces(marker=dict(size=13, line=dict(width=2, color=SURFACE)))
-                row_order = sorted({r["Row"] for r in rows if "·" in r["Row"]},
-                                   key=lambda x: (x.split(" · ")[0], x.endswith("after")))
-                row_order += sorted({r["Row"] for r in rows if "·" not in r["Row"]})
-                fig.update_yaxes(title=None, categoryorder="array", categoryarray=row_order[::-1])
-                fig.update_xaxes(tickformat="%H:%M", title=None, gridcolor="#2a2a28")
-                fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), legend=dict(orientation="h", y=-0.3, title=None))
-                st.plotly_chart(fig, width="stretch")
-            for b in k.get("branch_headways", []):
-                st.markdown(f"- **{b['group']}**: {b['reallocated']} of {b['departures']} reallocated · "
-                            f"max headway {b['max_headway_before_min']} → **{b['max_headway_after_min']} min**")
-        else:
-            st.markdown("<div class='sub-header'>Express timetable coverage</div>", unsafe_allow_html=True)
-            rows = [{"Row": f"{t['direction'].title()} ({r['route_id']})", "Time": pd.to_datetime(t["departure_iso"]),
-                     "Status": "Driven by existing staff" if t["covered"] else "Not covered",
-                     "Driver": t["driver_id"] or "–"} for r in routes for t in r["trips"]]
-            df = pd.DataFrame(rows)
-            fig = px.scatter(df, x="Time", y="Row", color="Status", symbol="Status", hover_data={"Driver": True},
-                             color_discrete_map={"Driven by existing staff": "#e3000f", "Not covered": "#5f5e5a"},
-                             symbol_map={"Driven by existing staff": "circle", "Not covered": "circle-open"},
-                             height=260)
-            fig.update_traces(marker=dict(size=11))
-            fig.update_yaxes(title=None)
-            fig.update_xaxes(tickformat="%H:%M", title=None, gridcolor="#2a2a28")
-            fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), legend=dict(orientation="h", y=-0.35, title=None))
-            st.plotly_chart(fig, width="stretch")
-            st.markdown(f"- Longest wait for an express: **{k.get('max_passenger_wait_min')} min**\n"
-                        f"- Seats added: **{k['seats_added']:,}** · peak express buses: **{k['peak_express_vehicles']}**\n"
-                        f"- Deadhead: **{k['deadhead_minutes']} min**")
-
-    st.markdown("<div class='sub-header'>Express timetable</div>", unsafe_allow_html=True)
-    tt = pd.DataFrame([{"Departure": t["departure"], "Arrival": t["arrival"], "From": t["from"], "To": t["to"],
-                        "Driven by": t["driver_id"] or "– not covered –", "Trip": t["trip_id"]}
-                       for r in routes for t in r["trips"]])
-    st.dataframe(tt, hide_index=True, width="stretch", height=min(400, 38 + 35 * max(1, len(tt))))
-    if realloc and out.get("reallocations"):
-        st.markdown("<div class='sub-header'>Reallocated Line 44 round trips</div>", unsafe_allow_html=True)
-        st.dataframe(pd.DataFrame([{
-            "Bus": r["driver_id"], "Branch": r["group"],
-            "Cancelled trips": " + ".join(f"{c['start']}–{c['end']} ({c.get('fahrtnummer', '')})" for c in r["cancelled"]),
-            "Freed window": f"{r['freed_window']['start']}–{r['freed_window']['end']}",
-            "X30 trips": ", ".join(r["express_trips"]),
-            "Driver rest (min)": f"{r['rest_before_min']} → {r['rest_after_min']}"} for r in out["reallocations"]]),
-            hide_index=True, width="stretch")
-
-# ------------------------------------------
-# TAB 2: DRIVER COMPANION APP
-# ------------------------------------------
-with tab2:
-    d = next(x for x in drivers if x["driver_id"] == pick)
-    st.markdown(f"<div class='sub-header'>Shift overview · {d['name']} ({d['shift_start']}–{d['shift_end']})</div>",
-                unsafe_allow_html=True)
-    nxt = next((s for s in d["after"] if s["type"] == "express"), None)
-    if nxt:
-        st.markdown(f"<div class='driver-status'>🟢 NEW TODAY | First express: {nxt['label']} at {nxt['start']}"
-                    f" · {d['stats']['express_trips']} express trips · labour rules verified</div><br>",
-                    unsafe_allow_html=True)
-    else:
-        st.markdown("<div class='driver-status idle'>No change to this shift today</div><br>", unsafe_allow_html=True)
-
-    df = pd.concat([seg_frame(d["before"], "Before"), seg_frame(d["after"], "After (optimized)")])
-    st.plotly_chart(gantt(df, ["Before", "After (optimized)"], 260), width="stretch")
-
-    left, right = st.columns([1.4, 1])
-    with left:
-        st.markdown("**Today's plan**")
-        st.markdown("\n".join(f"- `{line[:11]}` {line[11:].strip()}" for line in d["itinerary"]))
-    with right:
-        sb, sa = d["stats"]["before"], d["stats"]["after"]
-        m1, m2 = st.columns(2)
-        m1.metric("Express trips", sa["express_trips"])
-        m2.metric("Longest work stretch", f"{sa['max_continuous_work_min']} min",
-                  f"limit {out['rules']['max_continuous_work_min']} min", delta_color="off")
-        m1.metric("Work time", f"{sa['work_minutes']} min", f"{sa['work_minutes'] - sb['work_minutes']:+d} vs before",
-                  delta_color="off")
-        m2.metric("Break time", f"{sa['break_minutes']} min", f"{sa['break_minutes'] - sb['break_minutes']:+d} vs before",
-                  delta_color="off")
-        if d["breaks"]:
-            st.caption("Protected breaks: " + ", ".join(f"{b['start']}–{b['end']}" for b in d["breaks"]))
-        st.download_button("⬇️ Download my shift (JSON)", json.dumps(d, indent=2, ensure_ascii=False),
-                           file_name=f"shift_{d['driver_id']}.json", mime="application/json", width="stretch")
-
-# ------------------------------------------
-# TAB 3: OPTIMIZER INSIGHTS
-# ------------------------------------------
-with tab3:
-    a, b = st.columns(2)
+with t2:
     if realloc:
         curve = out.get("reallocation_curve") or default_out.get("reallocation_curve") or []
-        with a:
-            st.markdown("<div class='sub-header'>Trade-off: X30 service vs Line 44 trips handed over</div>",
-                        unsafe_allow_html=True)
-            if curve:
-                cdf = pd.DataFrame([{"Line 44 round trips reallocated": c["reallocated"],
-                                     "Longest wait for an X30 (min)": c["max_passenger_wait_min"],
-                                     "X30 departures": c["express_departures_outbound"]} for c in curve])
-                cdf = cdf.drop_duplicates("Line 44 round trips reallocated")
-                fig = px.line(cdf, x="Line 44 round trips reallocated", y="Longest wait for an X30 (min)", markers=True,
-                              hover_data={"X30 departures": True}, height=300)
-                fig.update_traces(line=dict(color="#e3000f", width=2), marker=dict(size=10, line=dict(width=2, color=SURFACE)))
-                fig.update_xaxes(dtick=1, gridcolor="#2a2a28")
-                fig.update_yaxes(gridcolor="#2a2a28", rangemode="tozero")
-                fig.update_layout(margin=dict(l=0, r=0, t=10, b=0))
-                st.plotly_chart(fig, width="stretch")
-                st.caption("Each point is a full CP-SAT solve with that disruption budget"
-                           + ("" if out.get("reallocation_curve") else " (computed with default rules)") + ".")
-        with b:
-            st.markdown("<div class='sub-header'>Line 44 impact per branch</div>", unsafe_allow_html=True)
-            st.dataframe(pd.DataFrame(k.get("branch_headways", [])).rename(columns={
-                "group": "Branch", "departures": "Candidates", "reallocated": "Reallocated",
-                "max_headway_before_min": "Max wait before", "max_headway_after_min": "Max wait after"}),
-                hide_index=True, width="stretch")
-            if (default_out.get("meta") or {}).get("assumptions"):
-                st.markdown("**Assumptions**")
-                st.markdown("\n".join(f"- {x}" for x in default_out["meta"]["assumptions"]))
+        if curve:
+            cdf = pd.DataFrame([{"Line 44 trips handed over": c["reallocated"],
+                                 "Longest wait for an X30 (min)": c["max_passenger_wait_min"]} for c in curve]
+                               ).drop_duplicates("Line 44 trips handed over")
+            fig = px.line(cdf, x="Line 44 trips handed over", y="Longest wait for an X30 (min)", markers=True, height=320)
+            fig.update_traces(line=dict(color=RED, width=3), marker=dict(size=12, line=dict(width=2, color=SURFACE)))
+            fig.update_xaxes(dtick=1, gridcolor="#2a2a28")
+            fig.update_yaxes(gridcolor="#2a2a28", rangemode="tozero")
+            fig.update_layout(margin=dict(l=0, r=0, t=10, b=0))
+            st.plotly_chart(fig, width="stretch")
+            st.caption("Each point is a full optimization run. The city picks the trade-off; the AI shows the exact cost.")
     else:
         sweep = out.get("scenarios") or default_out.get("scenarios") or []
-        curve = out.get("staffing_curve") or default_out.get("staffing_curve") or []
-        with a:
-            st.markdown("<div class='sub-header'>Which frequency can today's staff run?</div>", unsafe_allow_html=True)
-            if sweep:
-                sdf = pd.DataFrame([{"Express every (min)": str(s["headway_min"]), "Trips covered (%)": s["coverage_pct"],
-                                     "Trips": f"{s['trips_covered']}/{s['trips_target']}"} for s in sweep])
-                fig = px.bar(sdf, x="Express every (min)", y="Trips covered (%)", text="Trips", height=300)
-                fig.update_traces(marker_color="#e3000f", marker_line_color=SURFACE, marker_line_width=2)
-                fig.update_yaxes(range=[0, 105], gridcolor="#2a2a28")
-                fig.update_layout(margin=dict(l=0, r=0, t=10, b=0))
-                st.plotly_chart(fig, width="stretch")
-                st.caption("Each bar: a zero-new-staff CP-SAT solve at that headway.")
-        with b:
-            st.markdown("<div class='sub-header'>Coverage vs new hires</div>", unsafe_allow_html=True)
-            if curve:
-                cdf = pd.DataFrame([{"New drivers": str(c["new_drivers"]), "Trips covered (%)": c["coverage_pct"],
-                                     "Trips": f"{c['trips_covered']}/{c['trips_target']}"} for c in curve])
-                fig = px.bar(cdf, x="New drivers", y="Trips covered (%)", text="Trips", height=300)
-                fig.update_traces(marker_color="#3987e5", marker_line_color=SURFACE, marker_line_width=2)
-                fig.update_yaxes(range=[0, 105], gridcolor="#2a2a28")
-                fig.update_layout(margin=dict(l=0, r=0, t=10, b=0))
-                st.plotly_chart(fig, width="stretch")
-                st.caption(f"Traditional dedicated staffing for the same trips: {ded} new drivers.")
+        if sweep:
+            sdf = pd.DataFrame([{"Express every (min)": str(s["headway_min"]), "Trips covered (%)": s["coverage_pct"]}
+                                for s in sweep])
+            fig = px.bar(sdf, x="Express every (min)", y="Trips covered (%)", text="Trips covered (%)", height=320)
+            fig.update_traces(marker_color=RED)
+            fig.update_yaxes(range=[0, 105], gridcolor="#2a2a28")
+            fig.update_layout(margin=dict(l=0, r=0, t=10, b=0))
+            st.plotly_chart(fig, width="stretch")
+            st.caption("Which express frequency today's staff can run, with zero new drivers.")
 
-    st.markdown("<div class='sub-header'>Fleet view · all changed duties after optimization</div>",
-                unsafe_allow_html=True)
-    changed = [x for x in order if x["changed"]][:25]
-    if changed:
-        fdf = pd.concat([seg_frame(x["after"], x["driver_id"]) for x in changed])
-        st.plotly_chart(gantt(fdf, [x["driver_id"] for x in changed], 90 + 34 * len(changed)), width="stretch")
-    else:
-        st.info("No duty changed in this scenario.")
-
-    st.markdown("<div class='sub-header'>Independent validator</div>", unsafe_allow_html=True)
-    st.dataframe(pd.DataFrame([{"Check": c["name"].replace("_", " "), "Result": "✅ pass" if c["passed"] else "❌ fail",
-                                "Detail": c["detail"]} for c in comp.get("checks", [])]),
-                 hide_index=True, width="stretch")
-    with st.expander("Warnings, open validation items & raw output"):
-        for w in out.get("warnings", []):
-            st.warning(w)
-        for v in (default_out.get("meta") or {}).get("validation_required") or []:
-            st.markdown(f"- ⏳ needs validation: {v}")
-        st.download_button("⬇️ Download optimized_schedule.json", json.dumps(out, indent=2, ensure_ascii=False),
-                           file_name="optimized_schedule.json", mime="application/json")
+with t3:
+    st.dataframe(pd.DataFrame([{"Check": c["name"].replace("_", " ").capitalize(),
+                                "Result": "✅" if c["passed"] else "❌", "Detail": c["detail"]}
+                               for c in comp.get("checks", [])]), hide_index=True, width="stretch")
+    assumptions = (default_out.get("meta") or {}).get("assumptions")
+    if assumptions:
+        with st.expander("Assumptions"):
+            st.markdown("\n".join(f"- {a}" for a in assumptions))

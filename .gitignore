@@ -3,3 +3,12 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .DS_Store
+.vscode/
+
+# Raw GTFS data
+data/raw/vgn_gtfs/
+
+# Temporary PULS test outputs
+data/processed/puls_test_results.json
+data/processed/puls_departures_test.json
+data/processed/puls_return_legs.json

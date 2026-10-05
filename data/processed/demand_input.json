@@ -1,0 +1,320 @@
+{
+  "schema_version": "1.0",
+  "service_date": "2026-10-05",
+  "problem": "Express bus service under driver shortage",
+  "hero_route": {
+    "route_id": "X30",
+    "name": "Nürnberg Hbf – Nordostpark Express",
+    "origin": {
+      "name": "Nürnberg Hbf",
+      "vgn_stop_id": 510,
+      "latitude": 49.44725111,
+      "longitude": 11.08189
+    },
+    "destination": {
+      "name": "Nürnberg Nordostpark",
+      "gtfs_parent_stop_id": "de:09564:1372",
+      "latitude": 49.48914307,
+      "longitude": 11.12585039
+    },
+    "prototype_one_way_minutes": 18,
+    "service_window": {
+      "start": "06:30",
+      "end": "09:00"
+    },
+    "design_principle": "Do not assume additional vehicle or driver. Test reallocation or replacement of existing scheduled trips."
+  },
+  "demand_input": {
+    "method": "structural employment/transit proxy",
+    "warning": "These are prioritization weights, not measured passenger origin-destination counts.",
+    "hubs": [
+      {
+        "id": "HBF",
+        "name": "Nürnberg Hbf",
+        "type": "regional_transit_gateway",
+        "vgn_stop_id": 510,
+        "latitude": 49.44725111,
+        "longitude": 11.08189,
+        "demand_weight": 1.0
+      },
+      {
+        "id": "NORDOSTPARK",
+        "name": "Nürnberg Nordostpark",
+        "type": "employment_cluster",
+        "gtfs_parent_stop_id": "de:09564:1372",
+        "latitude": 49.48914307,
+        "longitude": 11.12585039,
+        "demand_weight": 1.0
+      },
+      {
+        "id": "HERRNHUETTE",
+        "name": "Nürnberg Herrnhütte",
+        "type": "feeder_transit_node",
+        "latitude": 49.47876082,
+        "longitude": 11.11012987,
+        "demand_weight": 0.75
+      },
+      {
+        "id": "NORDOSTBAHNHOF",
+        "name": "Nürnberg Nordostbahnhof",
+        "type": "feeder_transit_node",
+        "latitude": 49.47273122,
+        "longitude": 11.1040393,
+        "demand_weight": 0.7
+      }
+    ]
+  },
+  "observed_operations": {
+    "morning_puls_departures": 30,
+    "observed_vehicles": 12,
+    "verified_vehicle_returns": 29,
+    "verification_rate": 0.967,
+    "operational_patterns": [
+      {
+        "pattern_id": "43_passauer",
+        "label": [
+          "43",
+          "Passauer Str. (Nürnberg)"
+        ],
+        "observations": 14,
+        "observed_outbound_minutes": [
+          17.0
+        ],
+        "observed_terminal_turnaround_minutes": [
+          1.0
+        ],
+        "observed_full_cycle_minutes": [
+          31.0
+        ]
+      },
+      {
+        "pattern_id": "44_langwasser_mitte",
+        "label": [
+          "44",
+          "Langwasser Mitte (Nürnberg)"
+        ],
+        "observations": 8,
+        "observed_outbound_minutes": [
+          31.0
+        ],
+        "observed_terminal_turnaround_minutes": [
+          11.0
+        ],
+        "observed_full_cycle_minutes": [
+          71.0
+        ]
+      },
+      {
+        "pattern_id": "44_zerzabelshof_ost",
+        "label": [
+          "44",
+          "Zerzabelshof Ost (Nürnberg)"
+        ],
+        "observations": 7,
+        "observed_outbound_minutes": [
+          20.0
+        ],
+        "observed_terminal_turnaround_minutes": [
+          13.0
+        ],
+        "observed_full_cycle_minutes": [
+          51.0
+        ]
+      }
+    ]
+  },
+  "candidate_vehicle_windows": [
+    {
+      "line": "44",
+      "vehicle_number": "631",
+      "existing_fahrtnummer": "2182704",
+      "hbf_departure": "2026-10-05T06:33:00+02:00",
+      "terminal": "Langwasser Mitte (Nürnberg)",
+      "terminal_arrival": "2026-10-05T07:04:00+02:00",
+      "verified_return_fahrtnummer": "2182706",
+      "verified_return_departure": "2026-10-05T07:15:00+02:00",
+      "verified_return_hbf_arrival": "2026-10-05T07:44:00+02:00",
+      "terminal_to_next_hbf_minutes": 49.0,
+      "terminal_to_verified_return_minutes": 11.0,
+      "candidate_reason": "Observed same-vehicle schedule has 49 minutes from terminal arrival to next scheduled Hbf departure; test as a trip-replacement/reallocation candidate rather than spare capacity.",
+      "status": "candidate",
+      "requires_validation": [
+        "VAG operational approval",
+        "driver duty feasibility",
+        "vehicle circulation feasibility",
+        "impact on replaced service"
+      ]
+    },
+    {
+      "line": "44",
+      "vehicle_number": "248",
+      "existing_fahrtnummer": "2059839",
+      "hbf_departure": "2026-10-05T06:53:00+02:00",
+      "terminal": "Langwasser Mitte (Nürnberg)",
+      "terminal_arrival": "2026-10-05T07:24:00+02:00",
+      "verified_return_fahrtnummer": "2059841",
+      "verified_return_departure": "2026-10-05T07:35:00+02:00",
+      "verified_return_hbf_arrival": "2026-10-05T08:04:00+02:00",
+      "terminal_to_next_hbf_minutes": 49.0,
+      "terminal_to_verified_return_minutes": 11.0,
+      "candidate_reason": "Observed same-vehicle schedule has 49 minutes from terminal arrival to next scheduled Hbf departure; test as a trip-replacement/reallocation candidate rather than spare capacity.",
+      "status": "candidate",
+      "requires_validation": [
+        "VAG operational approval",
+        "driver duty feasibility",
+        "vehicle circulation feasibility",
+        "impact on replaced service"
+      ]
+    },
+    {
+      "line": "44",
+      "vehicle_number": "620",
+      "existing_fahrtnummer": "2117788",
+      "hbf_departure": "2026-10-05T07:13:00+02:00",
+      "terminal": "Langwasser Mitte (Nürnberg)",
+      "terminal_arrival": "2026-10-05T07:44:00+02:00",
+      "verified_return_fahrtnummer": "2117790",
+      "verified_return_departure": "2026-10-05T07:55:00+02:00",
+      "verified_return_hbf_arrival": "2026-10-05T08:24:00+02:00",
+      "terminal_to_next_hbf_minutes": 49.0,
+      "terminal_to_verified_return_minutes": 11.0,
+      "candidate_reason": "Observed same-vehicle schedule has 49 minutes from terminal arrival to next scheduled Hbf departure; test as a trip-replacement/reallocation candidate rather than spare capacity.",
+      "status": "candidate",
+      "requires_validation": [
+        "VAG operational approval",
+        "driver duty feasibility",
+        "vehicle circulation feasibility",
+        "impact on replaced service"
+      ]
+    },
+    {
+      "line": "44",
+      "vehicle_number": "281",
+      "existing_fahrtnummer": "2067642",
+      "hbf_departure": "2026-10-05T07:33:00+02:00",
+      "terminal": "Langwasser Mitte (Nürnberg)",
+      "terminal_arrival": "2026-10-05T08:04:00+02:00",
+      "verified_return_fahrtnummer": "2067644",
+      "verified_return_departure": "2026-10-05T08:15:00+02:00",
+      "verified_return_hbf_arrival": "2026-10-05T08:44:00+02:00",
+      "terminal_to_next_hbf_minutes": 49.0,
+      "terminal_to_verified_return_minutes": 11.0,
+      "candidate_reason": "Observed same-vehicle schedule has 49 minutes from terminal arrival to next scheduled Hbf departure; test as a trip-replacement/reallocation candidate rather than spare capacity.",
+      "status": "candidate",
+      "requires_validation": [
+        "VAG operational approval",
+        "driver duty feasibility",
+        "vehicle circulation feasibility",
+        "impact on replaced service"
+      ]
+    },
+    {
+      "line": "44",
+      "vehicle_number": "3960",
+      "existing_fahrtnummer": "2075807",
+      "hbf_departure": "2026-10-05T06:43:00+02:00",
+      "terminal": "Zerzabelshof Ost (Nürnberg)",
+      "terminal_arrival": "2026-10-05T07:03:00+02:00",
+      "verified_return_fahrtnummer": "2075808",
+      "verified_return_departure": "2026-10-05T07:16:00+02:00",
+      "verified_return_hbf_arrival": "2026-10-05T07:34:00+02:00",
+      "terminal_to_next_hbf_minutes": 40.0,
+      "terminal_to_verified_return_minutes": 13.0,
+      "candidate_reason": "Observed same-vehicle schedule has 40 minutes from terminal arrival to next scheduled Hbf departure; test as a trip-replacement/reallocation candidate rather than spare capacity.",
+      "status": "candidate",
+      "requires_validation": [
+        "VAG operational approval",
+        "driver duty feasibility",
+        "vehicle circulation feasibility",
+        "impact on replaced service"
+      ]
+    },
+    {
+      "line": "44",
+      "vehicle_number": "3964",
+      "existing_fahrtnummer": "2161909",
+      "hbf_departure": "2026-10-05T07:03:00+02:00",
+      "terminal": "Zerzabelshof Ost (Nürnberg)",
+      "terminal_arrival": "2026-10-05T07:23:00+02:00",
+      "verified_return_fahrtnummer": "2161910",
+      "verified_return_departure": "2026-10-05T07:36:00+02:00",
+      "verified_return_hbf_arrival": "2026-10-05T07:54:00+02:00",
+      "terminal_to_next_hbf_minutes": 40.0,
+      "terminal_to_verified_return_minutes": 13.0,
+      "candidate_reason": "Observed same-vehicle schedule has 40 minutes from terminal arrival to next scheduled Hbf departure; test as a trip-replacement/reallocation candidate rather than spare capacity.",
+      "status": "candidate",
+      "requires_validation": [
+        "VAG operational approval",
+        "driver duty feasibility",
+        "vehicle circulation feasibility",
+        "impact on replaced service"
+      ]
+    },
+    {
+      "line": "44",
+      "vehicle_number": "3962",
+      "existing_fahrtnummer": "2053010",
+      "hbf_departure": "2026-10-05T07:23:00+02:00",
+      "terminal": "Zerzabelshof Ost (Nürnberg)",
+      "terminal_arrival": "2026-10-05T07:43:00+02:00",
+      "verified_return_fahrtnummer": "2053011",
+      "verified_return_departure": "2026-10-05T07:56:00+02:00",
+      "verified_return_hbf_arrival": "2026-10-05T08:14:00+02:00",
+      "terminal_to_next_hbf_minutes": 40.0,
+      "terminal_to_verified_return_minutes": 13.0,
+      "candidate_reason": "Observed same-vehicle schedule has 40 minutes from terminal arrival to next scheduled Hbf departure; test as a trip-replacement/reallocation candidate rather than spare capacity.",
+      "status": "candidate",
+      "requires_validation": [
+        "VAG operational approval",
+        "driver duty feasibility",
+        "vehicle circulation feasibility",
+        "impact on replaced service"
+      ]
+    },
+    {
+      "line": "44",
+      "vehicle_number": "3960",
+      "existing_fahrtnummer": "2075809",
+      "hbf_departure": "2026-10-05T07:43:00+02:00",
+      "terminal": "Zerzabelshof Ost (Nürnberg)",
+      "terminal_arrival": "2026-10-05T08:03:00+02:00",
+      "verified_return_fahrtnummer": "2075810",
+      "verified_return_departure": "2026-10-05T08:16:00+02:00",
+      "verified_return_hbf_arrival": "2026-10-05T08:34:00+02:00",
+      "terminal_to_next_hbf_minutes": 40.0,
+      "terminal_to_verified_return_minutes": 13.0,
+      "candidate_reason": "Observed same-vehicle schedule has 40 minutes from terminal arrival to next scheduled Hbf departure; test as a trip-replacement/reallocation candidate rather than spare capacity.",
+      "status": "candidate",
+      "requires_validation": [
+        "VAG operational approval",
+        "driver duty feasibility",
+        "vehicle circulation feasibility",
+        "impact on replaced service"
+      ]
+    }
+  ],
+  "optimizer_constraints": {
+    "new_drivers_assumed": 0,
+    "new_vehicles_assumed": 0,
+    "x30_one_way_minutes": 18,
+    "do_not_treat_terminal_gap_as_idle": true,
+    "preserve_existing_service": true,
+    "validation_required": [
+      "VAG vehicle circulation approval",
+      "VAG driver duty approval",
+      "legal/contractual break validation",
+      "operational turnaround validation",
+      "passenger impact of any replaced trip"
+    ]
+  },
+  "objective": {
+    "primary": "maximize access to Nordostpark during morning peak",
+    "secondary": "minimize disruption to existing Line 43/44 service",
+    "resource_constraint": "use existing operational resources"
+  },
+  "source_files": {
+    "puls_morning": "data/processed/puls_morning_departures.json",
+    "puls_trip_details": "data/processed/puls_trip_details.json",
+    "puls_verified_returns": "data/processed/puls_return_legs_verified.json"
+  }
+}
